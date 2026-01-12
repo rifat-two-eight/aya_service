@@ -21,12 +21,12 @@ import {
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-  { icon: Users, label: "Users", href: "/dashboard/users" },
-  { icon: Building2, label: "Businesses", href: "/dashboard/businesses" },
-  { icon: Wrench, label: "Services", href: "/dashboard/services" },
-  { icon: CreditCard, label: "Transactions", href: "/dashboard/transactions" },
-  { icon: BarChart3, label: "Analytics", href: "/dashboard/analytics" },
-  { icon: FileText, label: "Subscriptions", href: "/dashboard/subscriptions" },
+  { icon: Users, label: "Users", href: "/users" },
+  { icon: Building2, label: "Businesses", href: "/businesses" },
+  { icon: Wrench, label: "Services", href: "/services" },
+  { icon: CreditCard, label: "Transactions", href: "/transactions" },
+  { icon: BarChart3, label: "Analytics", href: "/analytics" },
+  { icon: FileText, label: "Subscriptions", href: "/subscriptions" },
 ];
 
 export default function DashboardLayout({

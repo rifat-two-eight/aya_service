@@ -72,7 +72,7 @@ const actionCards = [
     buttonColor: "bg-red-500 hover:bg-red-600",
     buttonText: "Review Now",
     icon: AlertCircle,
-    link: "/dashboard/review",
+    link: "/review",
   },
   {
     title: "Active Sessions",
@@ -92,7 +92,7 @@ const actionCards = [
     buttonColor: "bg-[#0A5C36] hover:bg-[#154a2e]",
     buttonText: "View Users",
     icon: TrendingUp,
-    link: "/dashboard/users",
+    link: "/users",
   },
 ];
 
