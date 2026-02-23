@@ -79,18 +79,11 @@ export default function ClientHomePage() {
             {/* Featured Banner */}
             <div className="relative rounded-[40px] overflow-hidden bg-[#2D333B] h-64 md:h-80 lg:h-[400px] group cursor-pointer shadow-2xl shadow-black/10">
                 <Image
-                    src=""
+                    src="/home-hero.png"
                     alt="Featured Service"
                     fill
-                    className="object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000"
+                    className=""
                 />
-                <div className="absolute inset-0 p-12 md:p-20 flex flex-col justify-center items-start gap-6">
-                    <span className="text-white bg-[#0A5C36] px-5 py-2 rounded-full text-sm font-black uppercase tracking-widest shadow-lg">Featured Today</span>
-                    <h2 className="text-4xl md:text-6xl font-black text-white max-w-2xl leading-[1.1]">Book the Most Trusted Services Near You</h2>
-                    <Button size="lg" className="h-16 px-10 bg-white text-[#0A5C36] hover:bg-gray-100 rounded-full flex items-center gap-3 font-black text-xl shadow-2xl shadow-green-900/20">
-                        Explore Now <ChevronRight className="w-6 h-6" />
-                    </Button>
-                </div>
             </div>
 
             {/* Business Owner Promo */}
