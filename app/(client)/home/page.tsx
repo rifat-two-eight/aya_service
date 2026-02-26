@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, MapPin, Bell, Filter, Star, CheckCircle2, SearchCode, LocateFixed, Heart } from "lucide-react";
+import { Search, MapPin, Bell, Filter, Star, CheckCircle2, SearchCode, LocateFixed } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,7 @@ export default function ClientHomePage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="space-y-1">
-                    <h2 className="text-3xl md:text-3xl font-medium text-gray-900 tracking-tight">Discover Services</h2>
+                    <h2 className="text-3xl md:text-3xl font-medium text-[#0A5C36] tracking-tight">Aya Shop</h2>
                     <div className="flex items-center gap-2 text-gray-400 text-lg font-medium">
                         <MapPin className="w-5 h-5 text-red-500" />
                         <span>Barcelona, Spain</span>
@@ -80,11 +80,27 @@ export default function ClientHomePage() {
             {/* Featured Banner */}
             <div className="relative rounded-[40px] overflow-hidden bg-[#2D333B] h-64 md:h-80 lg:h-[400px] group cursor-pointer shadow-2xl shadow-black/10">
                 <Image
-                    src="/home-hero.png"
+                    src="/handshake.jpg"
                     alt="Featured Service"
                     fill
                     className=""
                 />
+                <div className="absolute inset-0 bg-black/60 pointer-events-none" />
+                <div className="absolute inset-0 flex items-center">
+                    <div className="flex flex-col ml-8 gap-3">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs text-white/90 bg-white/10 ring-1 ring-white/20">
+                            Featured
+                        </span>
+                        <h3 className="text-white text-2xl md:text-3xl font-medium">
+                            Book Top-Rated Service
+                        </h3>
+                        <Link href="/listings" className="mt-1 inline-flex">
+                            <Button className="h-10 px-4 rounded-lg bg-white text-[#0A5C36] hover:bg-gray-100 font-medium">
+                                Explore Now
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
             </div>
 
             {/* Business Owner Promo */}
@@ -133,9 +149,9 @@ export default function ClientHomePage() {
             <section className="space-y-8">
                 <div className="flex justify-between items-center">
                     <h3 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Top Rated Services</h3>
-                    <button className="text-xs font-black text-[#0A5C36] bg-green-50 px-6 py-3 rounded-full hover:bg-green-100 transition-all flex items-center gap-2 uppercase tracking-widest shadow-sm">
+                    <Link href="/listings" className="text-xs font-black text-[#0A5C36] bg-green-50 px-6 py-3 rounded-full hover:bg-green-100 transition-all flex items-center gap-2 uppercase tracking-widest shadow-sm">
                         View All Listings <ChevronRight className="w-4 h-4" />
-                    </button>
+                    </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {topServices.map((service) => (
@@ -143,9 +159,7 @@ export default function ClientHomePage() {
                             <div className="relative w-full h-56 rounded-[32px] overflow-hidden shadow-inner">
                                 <div className="absolute inset-0 bg-gray-100" />
                                 <Image src={service.image} alt={service.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
-                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-2xl shadow-lg border border-white/20">
-                                    <Heart className="w-5 h-5 text-gray-400 hover:text-red-500 transition-colors" />
-                                </div>
+                                
                             </div>
                             <div className="space-y-4">
                                 <div className="flex justify-between items-start">
@@ -165,9 +179,7 @@ export default function ClientHomePage() {
                                         <span className="text-xs text-gray-400 font-bold ml-1">({service.reviews} reviews)</span>
                                     </div>
                                 </div>
-                                <Button className="w-full h-14 rounded-2xl bg-gray-50 text-gray-900 font-black hover:bg-[#0A5C36] hover:text-white transition-all shadow-sm">
-                                    View Provider Details
-                                </Button>
+                                
                             </div>
                         </div>
                     ))}

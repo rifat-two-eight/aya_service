@@ -213,28 +213,16 @@ export default function BookingPage() {
 
             {/* Sticky Bottom Actions */}
             {step < 3 && (
-                <div className="fixed bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100 flex justify-center z-40 lg:hidden">
+                <div className=" left-0 right-0 p-6 bg-white border-t border-gray-100 flex justify-center z-40">
                     <div className="max-w-xl w-full">
                         <Button
                             onClick={nextStep}
                             disabled={step === 1 && (!selectedDate || !selectedTime)}
-                            className="w-full h-16 bg-[#064E3B] hover:bg-[#043327] rounded-2xl text-xl font-black shadow-2xl shadow-green-900/20 active:scale-[0.98] transition-all"
+                            className="w-full h-12 bg-[#064E3B] hover:bg-[#043327] rounded-2xl text-xl font-black shadow-2xl shadow-green-900/20 active:scale-[0.98] transition-all"
                         >
                             Continue
                         </Button>
                     </div>
-                </div>
-            )}
-
-            {/* Desktop Action (Centered) */}
-            {step < 3 && (
-                <div className="hidden lg:flex fixed bottom-10 left-1/2 -translate-x-1/2 z-40 w-full max-w-lg px-8">
-                    <Button
-                        onClick={nextStep}
-                        className="w-full h-20 bg-[#064E3B] hover:bg-[#043327] rounded-[28px] text-2xl font-black shadow-2xl shadow-green-900/30 active:scale-[0.98] transition-all"
-                    >
-                        Continue
-                    </Button>
                 </div>
             )}
         </div>

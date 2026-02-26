@@ -9,6 +9,7 @@ export function middleware(req: NextRequest) {
     pathname === "/home" ||
     pathname === "/search" ||
     pathname === "/profile" ||
+    pathname === "/listings" ||
     pathname.startsWith("/messages") ||
     pathname.startsWith("/services");
 
@@ -24,11 +25,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (clientAuthRoute && clientSession) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/home";
-    return NextResponse.redirect(url);
-  }
+  // Allow visiting client auth routes even if already logged in
 
   return NextResponse.next();
 }
@@ -38,6 +35,7 @@ export const config = {
     "/home",
     "/search",
     "/profile",
+    "/listings",
     "/messages/:path*",
     "/services/:path*",
     "/client/login",

@@ -92,9 +92,7 @@ export default function SearchPage() {
                                         <h4 className="font-black text-gray-900 leading-tight text-xl group-hover:text-[#0A5C36] transition-colors">{service.name}</h4>
                                         <span className="inline-block bg-green-50 text-[#0A5C36] text-[10px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full">{service.category}</span>
                                     </div>
-                                    <button className="text-gray-300 hover:text-red-500 transition-all">
-                                        <Heart className="w-7 h-7" />
-                                    </button>
+                                    
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />

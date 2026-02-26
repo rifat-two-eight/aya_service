@@ -12,14 +12,6 @@ export default function ClientLoginPage() {
     const router = useRouter();
     const [phoneNumber, setPhoneNumber] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [checked, setChecked] = useState(false);
-
-    if (!checked) {
-        if (typeof document !== "undefined" && document.cookie.includes("aya_client_session=1")) {
-            router.replace("/home");
-        }
-        setChecked(true);
-    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
