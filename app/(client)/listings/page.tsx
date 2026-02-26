@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, Star, ChevronLeft, Filter } from "lucide-react";
+import { MapPin, Star, ChevronLeft, Filter, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const topServices = [
@@ -120,6 +120,20 @@ export default function ListingsPage() {
                   </span>
                 </div>
               </div>
+            </div>
+            <div className="flex gap-4 pt-2">
+              <Link href="/services/1" className="flex-1">
+                <Button className="w-full h-12 bg-[#0A5C36] hover:bg-[#0d7344] rounded-2xl font-black text-xl shadow-xl shadow-green-900/20 active:scale-[0.97] transition-all">
+                  View Details
+                </Button>
+              </Link>
+              <Button
+                variant="outline"
+                className="h-12 w-16 rounded-2xl border-gray-100 hover:bg-white hover:border-[#0A5C36] p-0 shadow-sm group"
+                aria-label="Message"
+              >
+                <MessageSquare className="w-7 h-7 text-gray-400 group-hover:text-[#0A5C36]" />
+              </Button>
             </div>
           </div>
         ))}
