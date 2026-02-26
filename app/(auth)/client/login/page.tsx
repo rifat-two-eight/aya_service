@@ -12,11 +12,18 @@ export default function ClientLoginPage() {
     const router = useRouter();
     const [phoneNumber, setPhoneNumber] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [checked, setChecked] = useState(false);
+
+    if (!checked) {
+        if (typeof document !== "undefined" && document.cookie.includes("aya_client_session=1")) {
+            router.replace("/home");
+        }
+        setChecked(true);
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate API call
         setTimeout(() => {
             setIsLoading(false);
             router.push("/client/otp");
@@ -81,7 +88,7 @@ export default function ClientLoginPage() {
                         </Button>
 
                         <p className="text-center text-gray-500 font-medium">
-                            Don't have code? <button type="button" className="text-[#0A5C36] font-bold hover:underline">Resend Again</button>
+                            Don&apos;t have code? <button type="button" className="text-[#0A5C36] font-bold hover:underline">Resend Again</button>
                         </p>
                     </div>
                 </form>

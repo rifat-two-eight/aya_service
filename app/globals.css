@@ -122,3 +122,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Client UI minimal overrides */
+.client-ui :where(h1, h2, h3, h4, h5, h6) {
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+}
+.client-ui :where(p, span, small, label, a, li, dt, dd) {
+  font-weight: 400 !important;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.client-ui .font-bold,
+.client-ui .font-extrabold,
+.client-ui .font-black {
+  font-weight: 500 !important;
+}
+.client-ui .uppercase {
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+/* Tone down heavy shadows in client area */
+.client-ui .shadow,
+.client-ui .shadow-sm,
+.client-ui .shadow-md,
+.client-ui .shadow-lg,
+.client-ui .shadow-xl,
+.client-ui .shadow-2xl,
+.client-ui .shadow-inner {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+}
+/* Reduce extreme rounded corners in client area */
+.client-ui .rounded-\[40px\],
+.client-ui .rounded-\[48px\],
+.client-ui .rounded-\[60px\] {
+  border-radius: 16px !important;
+}
+/* Remove decorative gradients for cleaner look */
+.client-ui .bg-gradient-to-br,
+.client-ui .bg-gradient-to-r,
+.client-ui .bg-gradient-to-l,
+.client-ui .bg-gradient-to-t,
+.client-ui .bg-gradient-to-b {
+  background-image: none !important;
+}

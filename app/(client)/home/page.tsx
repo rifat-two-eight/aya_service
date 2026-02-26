@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, MapPin, Bell, Filter, Star, CheckCircle2, SearchCode, LocateFixed, Heart } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,16 +50,16 @@ export default function ClientHomePage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="space-y-1">
-                    <h2 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight">Discover Services</h2>
+                    <h2 className="text-3xl md:text-3xl font-medium text-gray-900 tracking-tight">Discover Services</h2>
                     <div className="flex items-center gap-2 text-gray-400 text-lg font-medium">
                         <MapPin className="w-5 h-5 text-red-500" />
                         <span>Barcelona, Spain</span>
                     </div>
                 </div>
-                <button className="p-4 bg-white border border-gray-100 rounded-[28px] text-gray-400 hover:text-[#0A5C36] transition-all relative shadow-sm hover:shadow-md">
+                <Link href="/notifications" className="p-4 bg-white border border-gray-100 rounded-[28px] text-gray-400 hover:text-[#0A5C36] transition-all relative shadow-sm hover:shadow-md">
                     <Bell className="w-6 h-6" />
                     <span className="absolute top-4 right-4 w-3 h-3 bg-red-500 rounded-full border-4 border-white" />
-                </button>
+                </Link>
             </header>
 
             {/* Search Bar */}

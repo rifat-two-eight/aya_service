@@ -32,10 +32,11 @@ export default function ClientOTPPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate verification
         setTimeout(() => {
             setIsLoading(false);
-            router.push("/home"); // Redirect to client homepage
+            const maxAge = 60 * 60 * 24 * 30;
+            document.cookie = `aya_client_session=1; path=/; max-age=${maxAge}; samesite=lax`;
+            router.push("/home");
         }, 1500);
     };
 
@@ -85,7 +86,7 @@ export default function ClientOTPPage() {
                         </Button>
 
                         <p className="text-center text-gray-500 font-medium">
-                            Don't have code? <button type="button" className="text-[#0A5C36] font-bold hover:underline">Resend Again</button>
+                            Don&apos;t have code? <button type="button" className="text-[#0A5C36] font-bold hover:underline">Resend Again</button>
                         </p>
                     </div>
                 </form>

@@ -2,6 +2,7 @@
 
 import { Search, MapPin, ChevronLeft, Filter, Star, Heart, MessageSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,9 +121,11 @@ export default function SearchPage() {
                         </div>
 
                         <div className="flex gap-4 pt-2">
-                            <Button className="flex-1 h-16 bg-[#0A5C36] hover:bg-[#0d7344] rounded-2xl font-black text-xl shadow-xl shadow-green-900/20 active:scale-[0.97] transition-all">
-                                View Details
-                            </Button>
+                            <Link href="/services/1" className="flex-1">
+                                <Button className="w-full h-16 bg-[#0A5C36] hover:bg-[#0d7344] rounded-2xl font-black text-xl shadow-xl shadow-green-900/20 active:scale-[0.97] transition-all">
+                                    View Details
+                                </Button>
+                            </Link>
                             <Button variant="outline" className="h-16 w-16 rounded-2xl border-gray-100 hover:bg-white hover:border-[#0A5C36] p-0 shadow-sm group">
                                 <MessageSquare className="w-7 h-7 text-gray-400 group-hover:text-[#0A5C36]" />
                             </Button>

@@ -8,6 +8,7 @@ import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export default function BusinessLoginPage() {
     const router = useRouter();
@@ -19,7 +20,7 @@ export default function BusinessLoginPage() {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            router.push("/dashboard"); // Redirect to business dashboard
+            toast.info("Business portal is coming soon.");
         }, 1500);
     };
 
@@ -89,7 +90,7 @@ export default function BusinessLoginPage() {
                         </Button>
 
                         <p className="text-center text-gray-500 font-medium">
-                            Don't have an account? <Link href="/business/signup" className="text-[#0A5C36] font-bold hover:underline">Sign Up</Link>
+                            Don&apos;t have an account? <Link href="/business/signup" className="text-[#0A5C36] font-bold hover:underline">Sign Up</Link>
                         </p>
                     </div>
                 </form>

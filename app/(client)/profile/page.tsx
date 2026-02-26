@@ -8,7 +8,7 @@ export default function ClientProfilePage() {
     const router = useRouter();
 
     const handleLogout = () => {
-        // Clear user data and redirect to role selection
+        document.cookie = "aya_client_session=; path=/; max-age=0; samesite=lax";
         router.push("/");
     };
 
