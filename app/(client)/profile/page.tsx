@@ -3,6 +3,7 @@
 import { User, LogOut, ChevronRight, Settings, Shield, Bell, Heart, History, Wallet, UserCircle, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function ClientProfilePage() {
     const router = useRouter();
@@ -56,9 +57,11 @@ export default function ClientProfilePage() {
                         <h1 className="text-2xl font-black text-gray-900">Rifat Ahmed</h1>
                         <p className="text-sm font-medium text-gray-400">rifat@example.com</p>
                     </div>
-                    <Button variant="outline" className="h-10 rounded-full px-6 border-gray-200 bg-white text-gray-600 font-bold text-xs hover:bg-gray-50 transition-all">
-                        Edit Profile
-                    </Button>
+                    <Link href="/profile/edit">
+                        <Button variant="outline" className="h-10 rounded-full px-6 border-gray-200 bg-white text-gray-600 font-bold text-xs hover:bg-gray-50 transition-all">
+                            Edit Profile
+                        </Button>
+                    </Link>
                 </div>
 
                 {/* Menu Sections Grid */}
