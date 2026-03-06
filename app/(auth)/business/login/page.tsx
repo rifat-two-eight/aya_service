@@ -20,7 +20,7 @@ export default function BusinessLoginPage() {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            toast.info("Business portal is coming soon.");
+            router.push("/business");
         }, 1500);
     };
 
