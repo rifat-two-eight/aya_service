@@ -123,9 +123,11 @@ export default function BusinessOverviewPage() {
                     Booking Requests
                   </Button>
                 </Link>
-                <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-sm">
-                  Submit Document
-                </Button>
+                <Link href="/business/documents" className="w-full">
+                  <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-sm w-full">
+                    Submit Document
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -135,7 +137,7 @@ export default function BusinessOverviewPage() {
             <div className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-black text-gray-900">Active Listings (3)</h3>
-                <Link href="#" className="text-sm font-black text-[#0A4D2E] bg-green-50 px-4 py-2 rounded-xl hover:bg-green-100 transition-all">
+                <Link href="/business/listings" className="text-sm font-black text-[#0A4D2E] bg-green-50 px-4 py-2 rounded-xl hover:bg-green-100 transition-all">
                   View All
                 </Link>
               </div>
@@ -161,7 +163,7 @@ export default function BusinessOverviewPage() {
         <div className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-black text-gray-900">Recent Reviews</h3>
-            <Link href="#" className="text-sm font-black text-[#0A4D2E] bg-green-50 px-4 py-2 rounded-xl hover:bg-green-100 transition-all">
+            <Link href="/business/reviews" className="text-sm font-black text-[#0A4D2E] bg-green-50 px-4 py-2 rounded-xl hover:bg-green-100 transition-all">
               View All
             </Link>
           </div>

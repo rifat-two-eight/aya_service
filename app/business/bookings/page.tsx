@@ -198,7 +198,13 @@ export default function BookingRequestsPage() {
             {/* Modals */}
             {modalState.type && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[40px] p-10 w-full max-w-sm text-center space-y-6 shadow-2xl animate-in zoom-in-95 duration-300">
+                    <div className="bg-white rounded-[40px] p-10 w-full max-w-sm text-center relative space-y-6 shadow-2xl animate-in zoom-in-95 duration-300">
+                        <button
+                            onClick={closeModal}
+                            className="absolute top-4 right-6 p-2 hover:bg-gray-50 rounded-xl transition-all text-gray-400"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
                         <div className={`w-20 h-20 rounded-full mx-auto flex items-center justify-center ${modalState.type === 'accepted' ? 'bg-green-100' : 'bg-red-100'
                             }`}>
                             {modalState.type === 'accepted' ? (
@@ -220,8 +226,8 @@ export default function BookingRequestsPage() {
                         <Button
                             onClick={closeModal}
                             className={`w-full h-14 rounded-2xl font-black text-lg transition-all ${modalState.type === 'accepted'
-                                    ? 'bg-[#0A4D2E] hover:bg-[#0d7344]'
-                                    : 'bg-red-600 hover:bg-red-700'
+                                ? 'bg-[#0A4D2E] hover:bg-[#0d7344]'
+                                : 'bg-red-600 hover:bg-red-700'
                                 }`}
                         >
                             {modalState.type === 'accepted' ? 'Great!' : 'Discard'}
