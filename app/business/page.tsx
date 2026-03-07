@@ -106,18 +106,24 @@ export default function BusinessOverviewPage() {
             <div className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-sm h-full">
               <h2 className="text-xl font-black text-gray-900 mb-6">Quick Actions</h2>
               <div className="grid grid-cols-2 gap-4">
-                <Button variant="outline" className="h-16 border-gray-100 rounded-2xl text-[#0A4D2E] font-black gap-3 hover:bg-green-50 shadow-sm transition-all">
-                  <DollarSign className="w-5 h-5" />
-                  Subscription
-                </Button>
-                <Button variant="outline" className="h-16 border-gray-100 rounded-2xl text-[#0A4D2E] font-black gap-3 hover:bg-green-50 shadow-sm transition-all">
-                  <Settings className="w-5 h-5" />
-                  Settings
-                </Button>
-                <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-lg">
-                  Booking Requests
-                </Button>
-                <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-lg">
+                <Link href="/business/subscription">
+                  <Button variant="outline" className="h-16 border-gray-100 rounded-2xl text-[#0A4D2E] font-black gap-3 hover:bg-green-50 shadow-sm transition-all w-full">
+                    <DollarSign className="w-5 h-5" />
+                    Subscription
+                  </Button>
+                </Link>
+                <Link href="/business/settings">
+                  <Button variant="outline" className="h-16 border-gray-100 rounded-2xl text-[#0A4D2E] font-black gap-3 hover:bg-green-50 shadow-sm transition-all w-full">
+                    <Settings className="w-5 h-5" />
+                    Settings
+                  </Button>
+                </Link>
+                <Link href="/business/bookings" className="w-full">
+                  <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-sm w-full">
+                    Booking Requests
+                  </Button>
+                </Link>
+                <Button className="h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-2xl font-black shadow-lg shadow-green-900/10 transition-all text-sm">
                   Submit Document
                 </Button>
               </div>
