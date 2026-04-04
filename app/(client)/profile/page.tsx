@@ -46,7 +46,7 @@ export default function ClientProfilePage() {
                 {/* Header/User Profile */}
                 <div className="flex flex-col items-center text-center space-y-4 pt-10">
                     <div className="relative">
-                        <div className="w-28 h-28 bg-gradient-to-br from-[#0A5C36] to-[#0D7A47] rounded-[32px] flex items-center justify-center shadow-xl shadow-green-900/20 border-4 border-white transform rotate-3 hover:rotate-0 transition-all duration-500">
+                        <div className="w-28 h-28 bg-linear-to-br from-[#0A5C36] to-[#0D7A47] rounded-[32px] flex items-center justify-center shadow-xl shadow-green-900/20 border-4 border-white transform rotate-3 hover:rotate-0 transition-all duration-500">
                             <User className="w-14 h-14 text-white" />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg border border-gray-100">

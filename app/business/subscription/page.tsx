@@ -170,7 +170,7 @@ export default function SubscriptionPage() {
 
                     <Button
                         onClick={() => window.location.href = "https://stripe.com"}
-                        className="w-full h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-[24px] text-lg font-black shadow-xl shadow-green-900/10 transition-all font-bold"
+                        className="w-full h-16 bg-[#0A4D2E] hover:bg-[#0d7344] rounded-[24px] text-lg font-black shadow-xl shadow-green-900/10 transition-all"
                     >
                         Confirm and Pay {selectedPlan.price}
                     </Button>

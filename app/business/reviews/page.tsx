@@ -86,7 +86,7 @@ export default function BusinessReviewsPage() {
                                 </div>
                             </div>
 
-                            <p className="text-sm font-medium text-gray-600 leading-relaxed mb-6 flex-grow">
+                            <p className="text-sm font-medium text-gray-600 leading-relaxed mb-6 grow">
                                 &quot;{r.text}&quot;
                             </p>
 

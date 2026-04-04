@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
+import { dashboardService } from "@/services/dashboardService";
 import {
   Dialog,
   DialogContent,
@@ -22,9 +24,33 @@ import {
   TrendingUp,
   ArrowRight,
   X,
+  Loader2,
 } from "lucide-react";
 
-const stats = [
+// Types for our dashboard data
+interface DashboardStat {
+  icon: any;
+  title: string;
+  value: string | number;
+  subtitle?: string;
+  change: string;
+  bgColor: string;
+  iconColor: string;
+}
+
+interface ActionCard {
+  title: string;
+  description: string;
+  value: string | number;
+  gradient: string;
+  buttonColor: string;
+  buttonText: string;
+  icon: any;
+  link?: string;
+  showModal?: boolean;
+}
+
+const defaultStats: DashboardStat[] = [
   {
     icon: Users,
     title: "Total Users",
@@ -63,7 +89,7 @@ const stats = [
   },
 ];
 
-const actionCards = [
+const actionCards: ActionCard[] = [
   {
     title: "Pending Approvals",
     description: "Businesses awaiting verification",
@@ -96,107 +122,76 @@ const actionCards = [
   },
 ];
 
-const activeSessions = [
-  {
-    name: "Sarah Johnson",
-    email: "sarah@email.com",
-    role: "Customer",
-    location: "New York, US",
-    device: "Chrome on Mac",
-    lastActive: "2 min ago",
-    ip: "192.168.1.1",
-  },
-  {
-    name: "Mohammed Al-Rashid",
-    email: "mohammed@email.com",
-    role: "Business",
-    location: "Chicago, US",
-    device: "Safari on iPhone",
-    lastActive: "5 min ago",
-    ip: "192.168.1.2",
-  },
-  {
-    name: "Emily Chen",
-    email: "emily@email.com",
-    role: "Business",
-    location: "San Francisco, US",
-    device: "Chrome on Windows",
-    lastActive: "8 min ago",
-    ip: "192.168.1.3",
-  },
-  {
-    name: "Ahmed Hassan",
-    email: "ahmed@email.com",
-    role: "Customer",
-    location: "Los Angeles, US",
-    device: "Firefox on Mac",
-    lastActive: "12 min ago",
-    ip: "192.168.1.4",
-  },
-  {
-    name: "Fatima Ali",
-    email: "fatima@email.com",
-    role: "Business",
-    location: "Houston, US",
-    device: "Edge on Windows",
-    lastActive: "15 min ago",
-    ip: "192.168.1.5",
-  },
-];
-
-const recentUsers = [
-  {
-    name: "Sarah Johnson",
-    email: "sarah@email.com",
-    date: "2026-01-04",
-    status: "active" as const,
-  },
-  {
-    name: "Mohammed Al-Rashid",
-    email: "mohammed@email.com",
-    date: "2026-01-03",
-    status: "active" as const,
-  },
-  {
-    name: "Emily Chen",
-    email: "emily@email.com",
-    date: "2026-01-02",
-    status: "pending" as const,
-  },
-  {
-    name: "Ahmed Hassan",
-    email: "ahmed@email.com",
-    date: "2026-01-01",
-    status: "active" as const,
-  },
-];
-
-const recentTransactions = [
-  {
-    name: "Sarah Johnson",
-    service: "Tony's Italian",
-    date: "2026-01-04",
-    amount: "$8",
-    status: "completed" as const,
-  },
-  {
-    name: "Ahmed Hassan",
-    service: "Quick Catering",
-    date: "2026-01-04",
-    amount: "$50",
-    status: "completed" as const,
-  },
-  {
-    name: "Emily Chen",
-    service: "Premium Events",
-    date: "2026-01-03",
-    amount: "$500",
-    status: "pending" as const,
-  },
-];
-
 export default function DashboardPage() {
   const [showSessionsModal, setShowSessionsModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState<DashboardStat[]>(defaultStats);
+  const [recentUsers, setRecentUsers] = useState<any[]>([]);
+  const [recentTransactions, setRecentTransactions] = useState<any[]>([]);
+  const [activeSessions, setActiveSessions] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setIsLoading(true);
+      try {
+        // Attempt to fetch real data
+        // These will likely fail until endpoints are implemented on the server
+        const [statsData, usersData, transactionsData, sessionsData] = await Promise.allSettled([
+          dashboardService.getStats(),
+          dashboardService.getRecentUsers(),
+          dashboardService.getRecentTransactions(),
+          dashboardService.getActiveSessions(),
+        ]);
+
+        if (statsData.status === "fulfilled") {
+          // Map API data to our stats format
+          // This depends on the exact API response structure
+          toast.success("Dashboard stats updated!");
+        }
+
+        if (usersData.status === "fulfilled") {
+          const apiUsers = usersData.value.data?.users || [];
+          const mappedUsers = apiUsers.map((user: any) => ({
+            name: user.fullName || "N/A",
+            email: user.email,
+            status: user.status === "active" ? "active" : "pending",
+            date: user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A",
+          }));
+          setRecentUsers(mappedUsers);
+
+          // Update total users stat if available
+          const totalUsers = usersData.value.data?.staticData?.totalUsers;
+          if (totalUsers) {
+            setStats(prev => prev.map(s => 
+              s.title === "Total Users" ? { ...s, value: totalUsers.toLocaleString() } : s
+            ));
+          }
+        }
+
+        if (transactionsData.status === "fulfilled") {
+          setRecentTransactions(transactionsData.value.data || []);
+        }
+
+        if (sessionsData.status === "fulfilled") {
+          setActiveSessions(sessionsData.value.data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-10 h-10 animate-spin text-[#0A5C36]" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 mx-10">
@@ -286,39 +281,43 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentUsers.map((user, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between py-2"
-              >
-                <div className="flex items-center gap-3">
-                  <Avatar className="w-10 h-10 bg-gray-100">
-                    <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] font-semibold">
-                      {user.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {user.name}
-                    </p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+            {recentUsers.length > 0 ? (
+              recentUsers.map((user, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2"
+                >
+                  <div className="flex items-center gap-3">
+                    <Avatar className="w-10 h-10 bg-gray-100">
+                      <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] font-semibold">
+                        {user.name?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-gray-500">{user.email}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <Badge
+                      variant={user.status === "active" ? "default" : "secondary"}
+                      className={
+                        user.status === "active"
+                          ? "bg-green-100 text-green-700 hover:bg-green-100"
+                          : "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
+                      }
+                    >
+                      {user.status}
+                    </Badge>
+                    <p className="text-xs text-gray-500 mt-1">{user.date}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <Badge
-                    variant={user.status === "active" ? "default" : "secondary"}
-                    className={
-                      user.status === "active"
-                        ? "bg-green-100 text-green-700 hover:bg-green-100"
-                        : "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
-                    }
-                  >
-                    {user.status}
-                  </Badge>
-                  <p className="text-xs text-gray-500 mt-1">{user.date}</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-sm text-gray-500 py-4">No recent users found.</p>
+            )}
           </CardContent>
         </Card>
 
@@ -336,41 +335,45 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent className="space-y-4">
-            {recentTransactions.map((transaction, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between py-2"
-              >
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {transaction.name}
-                  </p>
-                  <p className="text-xs text-gray-500">{transaction.service}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    {transaction.date}
-                  </p>
+            {recentTransactions.length > 0 ? (
+              recentTransactions.map((transaction, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between py-2"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">
+                      {transaction.name}
+                    </p>
+                    <p className="text-xs text-gray-500">{transaction.service}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {transaction.date}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-semibold text-gray-900">
+                      {transaction.amount}
+                    </p>
+                    <Badge
+                      variant={
+                        transaction.status === "completed"
+                          ? "default"
+                          : "secondary"
+                      }
+                      className={
+                        transaction.status === "completed"
+                          ? "bg-green-100 text-green-700 hover:bg-green-100"
+                          : "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
+                      }
+                    >
+                      {transaction.status}
+                    </Badge>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-gray-900">
-                    {transaction.amount}
-                  </p>
-                  <Badge
-                    variant={
-                      transaction.status === "completed"
-                        ? "default"
-                        : "secondary"
-                    }
-                    className={
-                      transaction.status === "completed"
-                        ? "bg-green-100 text-green-700 hover:bg-green-100"
-                        : "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
-                    }
-                  >
-                    {transaction.status}
-                  </Badge>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-sm text-gray-500 py-4">No recent transactions found.</p>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -417,53 +420,61 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {activeSessions.map((session, index) => (
-                    <tr key={index} className="border-b border-gray-100">
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] text-sm font-semibold">
-                              {session.name.charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {session.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {session.email}
-                            </p>
+                  {activeSessions.length > 0 ? (
+                    activeSessions.map((session, index) => (
+                      <tr key={index} className="border-b border-gray-100">
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="w-8 h-8">
+                              <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] text-sm font-semibold">
+                                {session.name?.charAt(0)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">
+                                {session.name}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {session.email}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <Badge
-                          className={
-                            session.role === "Customer"
-                              ? "bg-blue-100 text-blue-700 hover:bg-blue-100"
-                              : "bg-purple-100 text-purple-700 hover:bg-purple-100"
-                          }
-                        >
-                          {session.role}
-                        </Badge>
-                      </td>
-                      <td className="py-4 px-4 text-sm text-gray-600">
-                        {session.location}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-gray-600">
-                        {session.device}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <Activity className="w-3 h-3 text-green-500" />
-                          {session.lastActive}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-sm text-gray-600">
-                        {session.ip}
+                        </td>
+                        <td className="py-4 px-4">
+                          <Badge
+                            className={
+                              session.role === "Customer"
+                                ? "bg-blue-100 text-blue-700 hover:bg-blue-100"
+                                : "bg-purple-100 text-purple-700 hover:bg-purple-100"
+                            }
+                          >
+                            {session.role}
+                          </Badge>
+                        </td>
+                        <td className="py-4 px-4 text-sm text-gray-600">
+                          {session.location}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-gray-600">
+                          {session.device}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <Activity className="w-3 h-3 text-green-500" />
+                            {session.lastActive}
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-sm text-gray-600">
+                          {session.ip}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="text-center text-sm text-gray-500 py-8">
+                        No active sessions found.
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -481,4 +492,4 @@ export default function DashboardPage() {
       </Dialog>
     </div>
   );
-}
+}

@@ -73,8 +73,8 @@ export default function BookingPage() {
                         </div>
                     ))}
                     {/* Progress Lines */}
-                    <div className="absolute top-5 left-0 w-full h-[2px] bg-gray-100 -z-0" />
-                    <div className={`absolute top-5 left-0 h-[2px] bg-[#064E3B] transition-all duration-500 -z-0`}
+                    <div className="absolute top-5 left-0 w-full h-[2px] bg-gray-100 z-0" />
+                    <div className={`absolute top-5 left-0 h-[2px] bg-[#064E3B] transition-all duration-500 z-0`}
                         style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }} />
                 </div>
             </div>
@@ -104,8 +104,8 @@ export default function BookingPage() {
                                         key={d.date}
                                         onClick={() => setSelectedDate(d.date)}
                                         className={`p-4 rounded-2xl border transition-all text-left space-y-1 ${selectedDate === d.date
-                                                ? "bg-[#ebf4f0] border-[#064E3B] shadow-inner"
-                                                : "bg-white border-gray-100 hover:border-gray-200"
+                                            ? "bg-[#ebf4f0] border-[#064E3B] shadow-inner"
+                                            : "bg-white border-gray-100 hover:border-gray-200"
                                             }`}
                                     >
                                         <p className={`text-[10px] font-black uppercase tracking-widest ${selectedDate === d.date ? "text-[#064E3B]" : "text-gray-400"}`}>
@@ -131,8 +131,8 @@ export default function BookingPage() {
                                         key={t}
                                         onClick={() => setSelectedTime(t)}
                                         className={`py-4 rounded-2xl border transition-all font-black text-xs ${selectedTime === t
-                                                ? "bg-[#064E3B] border-[#064E3B] text-white shadow-lg"
-                                                : "bg-white border-gray-100 text-gray-600 hover:border-gray-200"
+                                            ? "bg-[#064E3B] border-[#064E3B] text-white shadow-lg"
+                                            : "bg-white border-gray-100 text-gray-600 hover:border-gray-200"
                                             }`}
                                     >
                                         {t}

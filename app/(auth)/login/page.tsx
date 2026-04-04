@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { authService } from "@/services/authService";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,14 +25,20 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await authService.adminLogin({
+        email: formData.email,
+        password: formData.password,
+      });
 
-      toast.success("You have been logged in successfully!");
-
-      router.push("/dashboard");
-    } catch (error) {
-      toast.error("Invalid email or password. Please try again.");
+      if (response.success) {
+        toast.success(response.message || "You have been logged in successfully!");
+        router.push("/dashboard");
+      } else {
+        toast.error(response.message || "Login failed. Please try again.");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred during login. Please try again.");
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }

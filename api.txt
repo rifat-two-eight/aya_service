@@ -1,0 +1,123 @@
+{
+    "statusCode": 200,
+    "success": true,
+    "message": "User fetched successfully",
+    "data": {
+        "users": [
+            {
+                "_id": "699e0d3a5fae326aa6025b0d",
+                "email": "xorox48946@kaoing.com",
+                "image": "",
+                "fullName": "dfggf",
+                "status": "active",
+                "verified": true,
+                "role": "business",
+                "fcmToken": "",
+                "createdAt": "2026-02-24T20:42:34.167Z",
+                "updatedAt": "2026-02-24T21:38:46.147Z",
+                "phone": "+8803232443",
+                "subscribe": true,
+                "business": {
+                    "businessName": "fsdsfd",
+                    "category": "69957a958cab7a66f8f10d2d",
+                    "description": "fsdfsdfds fdgfggf",
+                    "yearsInBusiness": 2025,
+                    "employeesCount": 15,
+                    "address": "dfsfds fdsdfs",
+                    "city": "fsdsfd",
+                    "state": "sfdsfd",
+                    "zipCode": "3321",
+                    "website": "ww.sdajkksdja.com",
+                    "logo": "/logo/1771969100925-xm63yv.png",
+                    "primaryDocuments": [],
+                    "secondaryDocuments": [],
+                    "photos": [
+                        "/photos/1771966004399-yi330e.jpg",
+                        "/photos/1771966006408-im8cbu.png",
+                        "/photos/1771966006446-n1brey.png",
+                        "/photos/1771966006477-pej743.png"
+                    ],
+                    "facebook": "www.facebook.com",
+                    "instagram": "www.instagram.com",
+                    "twitter": "www.twitter.com",
+                    "businessStatus": "approved",
+                    "stripeOnboardingCompleted": false,
+                    "_id": "699e0dda5fae326aa6025b2e"
+                }
+            },
+            {
+                "_id": "699df4b15fae326aa60254b3",
+                "email": "mosowo3463@netoiu.com",
+                "image": "",
+                "fullName": "Rimon",
+                "status": "active",
+                "verified": true,
+                "role": "business",
+                "fcmToken": "",
+                "createdAt": "2026-02-24T18:57:53.261Z",
+                "updatedAt": "2026-02-24T19:00:43.966Z",
+                "phone": "+8805365585858"
+            },
+            {
+                "_id": "699deb7a5fae326aa6025487",
+                "email": "horix50883@kaoing.com",
+                "image": "",
+                "fullName": "said",
+                "status": "active",
+                "verified": true,
+                "role": "business",
+                "fcmToken": "",
+                "createdAt": "2026-02-24T18:18:34.932Z",
+                "updatedAt": "2026-02-24T18:19:26.813Z",
+                "phone": "+8808666836"
+            },
+            {
+                "_id": "6998a309e56794644a3de1c5",
+                "email": "yewete1926@esyline.com",
+                "image": "",
+                "fullName": "Sakil kjdsajk",
+                "status": "active",
+                "verified": true,
+                "role": "client",
+                "fcmToken": "",
+                "createdAt": "2026-02-20T18:08:09.849Z",
+                "updatedAt": "2026-02-20T18:09:42.781Z",
+                "phone": "+8803422344"
+            },
+            {
+                "_id": "6997822be56794644a3de166",
+                "email": "xocenig333@bitonc.com",
+                "image": "",
+                "fullName": "Mizan",
+                "status": "active",
+                "verified": true,
+                "role": "business",
+                "fcmToken": "",
+                "createdAt": "2026-02-19T21:35:39.096Z",
+                "updatedAt": "2026-02-19T21:36:10.746Z"
+            },
+            
+            {
+                "_id": "69977a05e56794644a3de12e",
+                "email": "hexiteb560@bitonc.com",
+                "image": "",
+                "fullName": "dsfdfs",
+                "status": "active",
+                "verified": true,
+                "role": "business",
+                "fcmToken": "",
+                "createdAt": "2026-02-19T21:00:53.076Z",
+                "updatedAt": "2026-02-19T21:01:24.929Z"
+            }
+        ],
+        "staticData": {
+            "totalUsers": 23
+        },
+        "meta": {
+            "total": 23,
+            "limit": 10,
+            "page": 1,
+            "totalPage": 3
+        }
+    }
+}

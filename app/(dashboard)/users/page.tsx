@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { toast } from "sonner";
+import { userService } from "@/services/userService";
 import {
   Dialog,
   DialogContent,
@@ -27,113 +29,90 @@ import {
   Calendar,
   Activity,
   DollarSign,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
 } from "lucide-react";
 
-const statsCards = [
-  {
-    icon: Users,
-    title: "Total Users",
-    value: "8",
-    bgColor: "bg-purple-100",
-    iconColor: "text-purple-600",
-  },
-  {
-    icon: CheckCircle,
-    title: "Active Users",
-    value: "6",
-    bgColor: "bg-green-100",
-    iconColor: "text-green-600",
-  },
-  {
-    icon: Building2,
-    title: "Business Owners",
-    value: "2",
-    bgColor: "bg-blue-100",
-    iconColor: "text-blue-600",
-  },
-  {
-    icon: Clock,
-    title: "Pending",
-    value: "1",
-    bgColor: "bg-yellow-100",
-    iconColor: "text-yellow-600",
-  },
-];
-
-const usersData = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    email: "sarah@email.com",
-    role: "Customer",
-    status: "Active",
-    location: "New York, US",
-    joined: "2026-01-04",
-    totalSpent: "$450",
-    phone: "(555) 123-4567",
-    lastActive: "2 hours ago",
-  },
-  {
-    id: 2,
-    name: "Mohammed Al-Rashid",
-    email: "mohammed@email.com",
-    role: "Business",
-    status: "Active",
-    location: "Chicago, US",
-    joined: "2026-01-03",
-    totalSpent: "$12,450",
-    phone: "(555) 234-5678",
-    lastActive: "5 minutes ago",
-  },
-  {
-    id: 3,
-    name: "Emily Chen",
-    email: "emily@email.com",
-    role: "Business",
-    status: "Pending",
-    location: "San Francisco, US",
-    joined: "2026-01-02",
-    totalSpent: "$0",
-    phone: "(555) 345-6789",
-    lastActive: "1 day ago",
-  },
-  {
-    id: 4,
-    name: "Ahmed Hassan",
-    email: "ahmed@email.com",
-    role: "Customer",
-    status: "Active",
-    location: "Los Angeles, US",
-    joined: "2026-01-01",
-    totalSpent: "$890",
-    phone: "(555) 456-7890",
-    lastActive: "3 hours ago",
-  },
-  {
-    id: 5,
-    name: "David Kim",
-    email: "david@email.com",
-    role: "Customer",
-    status: "Inactive",
-    location: "Seattle, US",
-    joined: "2025-12-15",
-    totalSpent: "$350",
-    phone: "(555) 890-1234",
-    lastActive: "7 days ago",
-  },
-];
-
 export default function UsersPage() {
-  const [selectedUser, setSelectedUser] = useState<
-    (typeof usersData)[0] | null
-  >(null);
+  const [users, setUsers] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const filteredUsers = usersData.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [stats, setStats] = useState([
+    {
+      icon: Users,
+      title: "Total Users",
+      value: "0",
+      bgColor: "bg-purple-100",
+      iconColor: "text-purple-600",
+    },
+    {
+      icon: CheckCircle,
+      title: "Active Users",
+      value: "0",
+      bgColor: "bg-green-100",
+      iconColor: "text-green-600",
+    },
+    {
+      icon: Building2,
+      title: "Business Owners",
+      value: "0",
+      bgColor: "bg-blue-100",
+      iconColor: "text-blue-600",
+    },
+    {
+      icon: Clock,
+      title: "Pending",
+      value: "0",
+      bgColor: "bg-yellow-100",
+      iconColor: "text-yellow-600",
+    },
+  ]);
+
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    try {
+      const response = await userService.getUsers({
+        page: currentPage,
+        limit: 10,
+        searchTerm: searchQuery,
+      });
+
+      if (response.success) {
+        setUsers(response.data.users);
+        setTotalPages(response.data.meta.totalPage);
+        setTotalCount(response.data.meta.total);
+
+        // Update stats from the API static data if available
+        const total = response.data.staticData?.totalUsers || response.data.meta.total;
+        setStats(prev => prev.map(s => {
+          if (s.title === "Total Users") return { ...s, value: total.toString() };
+          // For now, we only have totalUsers from staticData in api.txt
+          return s;
+        }));
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to fetch users");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, searchQuery]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCurrentPage(1);
+    fetchUsers();
+  };
 
   return (
     <div className="space-y-6 mx-10">
@@ -141,7 +120,7 @@ export default function UsersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
-          <p className="text-sm text-gray-500 mt-1">8 total users • 6 active</p>
+          <p className="text-sm text-gray-500 mt-1">{totalCount} total users</p>
         </div>
         <Button className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg">
           <Download className="w-4 h-4 mr-2" />
@@ -151,7 +130,7 @@ export default function UsersPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statsCards.map((stat, index) => {
+        {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
             <Card key={index} className="border-gray-200 rounded-2xl">
@@ -176,32 +155,33 @@ export default function UsersPage() {
       {/* Filters */}
       <Card className="border-gray-200 rounded-2xl">
         <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4">
+          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  placeholder="Search users..."
+                  placeholder="Search users by name or email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 rounded-lg"
                 />
               </div>
             </div>
-            <Button variant="outline" className="border-gray-300 rounded-lg">
+            <Button type="submit" variant="outline" className="border-gray-300 rounded-lg">
               <Filter className="w-4 h-4 mr-2" />
-              Filter
+              Apply Search
             </Button>
-            <Button variant="outline" className="border-gray-300 rounded-lg">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter
-            </Button>
-          </div>
+          </form>
         </CardContent>
       </Card>
 
       {/* Users Table */}
-      <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl">
+      <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl min-h-[400px] relative">
+        {isLoading ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+                <Loader2 className="w-8 h-8 animate-spin text-[#0A5C36]" />
+            </div>
+        ) : null}
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">
@@ -215,13 +195,10 @@ export default function UsersPage() {
                 Status
               </th>
               <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
-                Location
+                Phone
               </th>
               <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                 Joined
-              </th>
-              <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
-                Total Spent
               </th>
               <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                 Actions
@@ -229,21 +206,21 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((user) => (
+            {!isLoading && users.map((user) => (
               <tr
-                key={user.id}
+                key={user._id}
                 className="border-b border-gray-100 hover:bg-gray-50"
               >
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-3">
                     <Avatar className="w-10 h-10">
                       <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] font-semibold">
-                        {user.name.charAt(0)}
+                        {user.fullName ? user.fullName.charAt(0) : "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        {user.name}
+                        {user.fullName || "N/A"}
                       </p>
                       <p className="text-xs text-gray-500">{user.email}</p>
                     </div>
@@ -252,35 +229,30 @@ export default function UsersPage() {
                 <td className="py-4 px-6">
                   <Badge
                     className={
-                      user.role === "Customer"
+                      user.role === "client"
                         ? "bg-gray-100 text-gray-700 hover:bg-gray-100"
                         : "bg-blue-100 text-blue-700 hover:bg-blue-100"
                     }
                   >
-                    {user.role}
+                    {user.role === "client" ? "Customer" : "Business"}
                   </Badge>
                 </td>
                 <td className="py-4 px-6">
                   <Badge
                     className={
-                      user.status === "Active"
+                      user.status === "active"
                         ? "bg-green-100 text-green-700 hover:bg-green-100"
-                        : user.status === "Pending"
-                        ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-100"
                     }
                   >
-                    {user.status}
+                    {user.status === "active" ? "Active" : "Inactive"}
                   </Badge>
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {user.location}
+                  {user.phone || "N/A"}
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {user.joined}
-                </td>
-                <td className="py-4 px-6 text-sm font-semibold text-gray-900">
-                  {user.totalSpent}
+                  {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
                 </td>
                 <td className="py-4 px-6">
                   <div className="flex items-center gap-2">
@@ -297,8 +269,44 @@ export default function UsersPage() {
                 </td>
               </tr>
             ))}
+            {!isLoading && users.length === 0 && (
+                <tr>
+                    <td colSpan={6} className="py-12 text-center text-gray-500">
+                        No users found matching your search.
+                    </td>
+                </tr>
+            )}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-white">
+          <p className="text-sm text-gray-500">
+            Page {currentPage} of {totalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1 || isLoading}
+              onClick={() => setCurrentPage(p => p - 1)}
+              className="rounded-lg h-9 px-3"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages || isLoading}
+              onClick={() => setCurrentPage(p => p + 1)}
+              className="rounded-lg h-9 px-3"
+            >
+              Next
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* User Details Modal */}
@@ -317,12 +325,12 @@ export default function UsersPage() {
                 <div className="flex items-center gap-4">
                   <Avatar className="w-14 h-14">
                     <AvatarFallback className="bg-[#E8F5E9] text-[#0A5C36] text-xl font-semibold">
-                      {selectedUser.name.charAt(0)}
+                      {selectedUser.fullName?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900">
-                      {selectedUser.name}
+                      {selectedUser.fullName || "N/A"}
                     </h3>
                     <p className="text-sm text-gray-500">
                       {selectedUser.email}
@@ -330,21 +338,21 @@ export default function UsersPage() {
                     <div className="flex items-center gap-2 mt-2">
                       <Badge
                         className={
-                          selectedUser.role === "Customer"
+                          selectedUser.role === "client"
                             ? "bg-gray-100 text-gray-700 hover:bg-gray-100"
                             : "bg-blue-100 text-blue-700 hover:bg-blue-100"
                         }
                       >
-                        {selectedUser.role}
+                        {selectedUser.role === "client" ? "Customer" : "Business"}
                       </Badge>
                       <Badge
                         className={
-                          selectedUser.status === "Active"
+                          selectedUser.status === "active"
                             ? "bg-green-100 text-green-700 hover:bg-green-100"
-                            : "bg-yellow-100 text-yellow-700 hover:bg-yellow-100"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-100"
                         }
                       >
-                        {selectedUser.status}
+                        {selectedUser.status === "active" ? "Active" : "Inactive"}
                       </Badge>
                     </div>
                   </div>
@@ -352,56 +360,35 @@ export default function UsersPage() {
 
                 {/* Details Grid */}
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-xl">
+                  <div className="bg-gray-50 p-4 rounded-xl col-span-2">
                     <div className="flex items-center gap-2 text-gray-600 mb-1">
                       <Phone className="w-4 h-4" />
                       <p className="text-xs font-medium">Phone</p>
                     </div>
                     <p className="text-sm font-semibold text-gray-900">
-                      {selectedUser.phone}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 p-4 rounded-xl">
-                    <div className="flex items-center gap-2 text-gray-600 mb-1">
-                      <MapPin className="w-4 h-4" />
-                      <p className="text-xs font-medium">Location</p>
-                    </div>
-                    <p className="text-sm font-semibold text-gray-900">
-                      {selectedUser.location}
+                      {selectedUser.phone || "N/A"}
                     </p>
                   </div>
 
                   <div className="bg-gray-50 p-4 rounded-xl">
                     <div className="flex items-center gap-2 text-gray-600 mb-1">
                       <Calendar className="w-4 h-4" />
-                      <p className="text-xs font-medium">Joined</p>
+                      <p className="text-xs font-medium">Joined Date</p>
                     </div>
                     <p className="text-sm font-semibold text-gray-900">
-                      {selectedUser.joined}
+                      {selectedUser.createdAt ? new Date(selectedUser.createdAt).toLocaleDateString() : "N/A"}
                     </p>
                   </div>
 
                   <div className="bg-gray-50 p-4 rounded-xl">
                     <div className="flex items-center gap-2 text-gray-600 mb-1">
-                      <Activity className="w-4 h-4" />
-                      <p className="text-xs font-medium">Last Active</p>
+                      <CheckCircle className="w-4 h-4" />
+                      <p className="text-xs font-medium">Verified</p>
                     </div>
                     <p className="text-sm font-semibold text-gray-900">
-                      {selectedUser.lastActive}
+                      {selectedUser.verified ? "Verified" : "Not Verified"}
                     </p>
                   </div>
-                </div>
-
-                {/* Total Spent */}
-                <div className="bg-green-50 p-4 rounded-xl">
-                  <div className="flex items-center gap-2 text-gray-600 mb-1">
-                    <DollarSign className="w-4 h-4" />
-                    <p className="text-xs font-medium">Total Spent</p>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {selectedUser.totalSpent}
-                  </p>
                 </div>
 
                 {/* Close Button */}
