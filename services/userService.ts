@@ -22,4 +22,13 @@ export const userService = {
       throw error.response?.data || error.message;
     }
   },
+
+  deleteUser: async (id: string) => {
+    try {
+      const response = await axiosInstance.delete(`/user/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
 };

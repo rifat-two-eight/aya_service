@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { userService } from "@/services/userService";
+import Swal from "sweetalert2";
 import {
   Dialog,
   DialogContent,
@@ -114,6 +115,44 @@ export default function UsersPage() {
     fetchUsers();
   };
 
+  const handleDeleteUser = async (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#0A5C36",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      background: "#fff",
+      customClass: {
+        popup: "rounded-2xl",
+        confirmButton: "rounded-lg px-6 py-2",
+        cancelButton: "rounded-lg px-6 py-2",
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await userService.deleteUser(id);
+          if (response.success) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "User has been deleted.",
+              icon: "success",
+              confirmButtonColor: "#0A5C36",
+            });
+            fetchUsers();
+          } else {
+            toast.error(response.message || "Failed to delete user");
+          }
+        } catch (error: any) {
+          toast.error(error.message || "Failed to delete user");
+          console.error(error);
+        }
+      }
+    });
+  };
+
   return (
     <div className="space-y-6 mx-10">
       {/* Header */}
@@ -178,9 +217,9 @@ export default function UsersPage() {
       {/* Users Table */}
       <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl min-h-[400px] relative">
         {isLoading ? (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
-                <Loader2 className="w-8 h-8 animate-spin text-[#0A5C36]" />
-            </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+            <Loader2 className="w-8 h-8 animate-spin text-[#0A5C36]" />
+          </div>
         ) : null}
         <table className="w-full">
           <thead>
@@ -262,7 +301,10 @@ export default function UsersPage() {
                     >
                       <Eye className="w-4 h-4 text-gray-600" />
                     </button>
-                    <button className="p-2 hover:bg-red-50 rounded-lg transition-colors">
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                    >
                       <Trash2 className="w-4 h-4 text-red-600" />
                     </button>
                   </div>
@@ -270,11 +312,11 @@ export default function UsersPage() {
               </tr>
             ))}
             {!isLoading && users.length === 0 && (
-                <tr>
-                    <td colSpan={6} className="py-12 text-center text-gray-500">
-                        No users found matching your search.
-                    </td>
-                </tr>
+              <tr>
+                <td colSpan={6} className="py-12 text-center text-gray-500">
+                  No users found matching your search.
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
