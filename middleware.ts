@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
     pathname === "/profile" ||
     pathname === "/listings" ||
     pathname.startsWith("/messages") ||
-    pathname.startsWith("/services");
+    pathname.startsWith("/services/");
 
   const clientAuthRoute =
     pathname === "/client/login" || pathname === "/client/otp";

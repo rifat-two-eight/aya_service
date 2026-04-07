@@ -1,123 +1,133 @@
 {
     "statusCode": 200,
     "success": true,
-    "message": "User fetched successfully",
-    "data": {
-        "users": [
-            {
-                "_id": "699e0d3a5fae326aa6025b0d",
-                "email": "xorox48946@kaoing.com",
-                "image": "",
-                "fullName": "dfggf",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T20:42:34.167Z",
-                "updatedAt": "2026-02-24T21:38:46.147Z",
-                "phone": "+8803232443",
-                "subscribe": true,
-                "business": {
-                    "businessName": "fsdsfd",
-                    "category": "69957a958cab7a66f8f10d2d",
-                    "description": "fsdfsdfds fdgfggf",
-                    "yearsInBusiness": 2025,
-                    "employeesCount": 15,
-                    "address": "dfsfds fdsdfs",
-                    "city": "fsdsfd",
-                    "state": "sfdsfd",
-                    "zipCode": "3321",
-                    "website": "ww.sdajkksdja.com",
-                    "logo": "/logo/1771969100925-xm63yv.png",
-                    "primaryDocuments": [],
-                    "secondaryDocuments": [],
-                    "photos": [
-                        "/photos/1771966004399-yi330e.jpg",
-                        "/photos/1771966006408-im8cbu.png",
-                        "/photos/1771966006446-n1brey.png",
-                        "/photos/1771966006477-pej743.png"
-                    ],
-                    "facebook": "www.facebook.com",
-                    "instagram": "www.instagram.com",
-                    "twitter": "www.twitter.com",
-                    "businessStatus": "approved",
-                    "stripeOnboardingCompleted": false,
-                    "_id": "699e0dda5fae326aa6025b2e"
-                }
-            },
-            {
-                "_id": "699df4b15fae326aa60254b3",
-                "email": "mosowo3463@netoiu.com",
-                "image": "",
-                "fullName": "Rimon",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T18:57:53.261Z",
-                "updatedAt": "2026-02-24T19:00:43.966Z",
-                "phone": "+8805365585858"
-            },
-            {
-                "_id": "699deb7a5fae326aa6025487",
-                "email": "horix50883@kaoing.com",
-                "image": "",
-                "fullName": "said",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T18:18:34.932Z",
-                "updatedAt": "2026-02-24T18:19:26.813Z",
-                "phone": "+8808666836"
-            },
-            {
-                "_id": "6998a309e56794644a3de1c5",
-                "email": "yewete1926@esyline.com",
-                "image": "",
-                "fullName": "Sakil kjdsajk",
-                "status": "active",
-                "verified": true,
-                "role": "client",
-                "fcmToken": "",
-                "createdAt": "2026-02-20T18:08:09.849Z",
-                "updatedAt": "2026-02-20T18:09:42.781Z",
-                "phone": "+8803422344"
-            },
-            {
-                "_id": "6997822be56794644a3de166",
-                "email": "xocenig333@bitonc.com",
-                "image": "",
-                "fullName": "Mizan",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T21:35:39.096Z",
-                "updatedAt": "2026-02-19T21:36:10.746Z"
-            },
-            
-            {
-                "_id": "69977a05e56794644a3de12e",
-                "email": "hexiteb560@bitonc.com",
-                "image": "",
-                "fullName": "dsfdfs",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T21:00:53.076Z",
-                "updatedAt": "2026-02-19T21:01:24.929Z"
-            }
-        ],
-        "staticData": {
-            "totalUsers": 23
+    "message": "Payments retrieved successfully",
+    "meta": {
+        "total": 16,
+        "limit": 10,
+        "page": 1,
+        "totalPage": 2
+    },
+    "data": [
+        {
+            "_id": "699e0cd85fae326aa6025ad4",
+            "email": "kofofe1970@esyline.com",
+            "dateTime": "2026-02-24T20:40:56.589Z",
+            "referenceId": "699e0cb45fae326aa6025acb",
+            "amount": 50,
+            "transactionId": "pi_3T4SPe93XxwmTnv21pNcCP3e",
+            "customerName": "gfg",
+            "createdAt": "2026-02-24T20:40:56.592Z",
+            "updatedAt": "2026-02-24T20:40:56.592Z",
+            "__v": 0
         },
-        "meta": {
-            "total": 23,
-            "limit": 10,
-            "page": 1,
-            "totalPage": 3
+        {
+            "_id": "699cef7e8ce2460a4c6adf15",
+            "email": "kofofe1970@esyline.com",
+            "dateTime": "2026-02-24T00:23:26.300Z",
+            "referenceId": "699cef648ce2460a4c6adf0c",
+            "amount": 50,
+            "transactionId": "pi_3T49PM93XxwmTnv21nFljAc8",
+            "customerName": "Fxgxgx",
+            "createdAt": "2026-02-24T00:23:26.302Z",
+            "updatedAt": "2026-02-24T00:23:26.302Z",
+            "__v": 0
+        },
+        {
+            "_id": "699cee238ce2460a4c6adeaf",
+            "email": "kofofe1970@esyline.com",
+            "dateTime": "2026-02-24T00:17:39.441Z",
+            "referenceId": "699cee038ce2460a4c6adea6",
+            "amount": 50,
+            "transactionId": "pi_3T49Jl93XxwmTnv20sA3rrET",
+            "customerName": "Cgcggc",
+            "createdAt": "2026-02-24T00:17:39.442Z",
+            "updatedAt": "2026-02-24T00:17:39.442Z",
+            "__v": 0
+        },
+        {
+            "_id": "699ceb7a8ce2460a4c6ade5b",
+            "email": "kofofe1970@esyline.com",
+            "dateTime": "2026-02-24T00:06:18.449Z",
+            "referenceId": "699ceb4e8ce2460a4c6ade52",
+            "amount": 50,
+            "transactionId": "pi_3T498m93XxwmTnv21GBokb77",
+            "customerName": "Ycgcggc",
+            "createdAt": "2026-02-24T00:06:18.458Z",
+            "updatedAt": "2026-02-24T00:06:18.458Z",
+            "__v": 0
+        },
+        {
+            "_id": "699bbfbafb523476d221efde",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-23T02:47:22.858Z",
+            "referenceId": "699bbf6efb523476d221efd4",
+            "amount": 494,
+            "transactionId": "pi_3T3pB693XxwmTnv21v0Sv7af",
+            "customerName": "jklkj",
+            "createdAt": "2026-02-23T02:47:22.859Z",
+            "updatedAt": "2026-02-23T02:47:22.859Z",
+            "__v": 0
+        },
+        {
+            "_id": "69915e1e32d641443d85b0be",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-15T05:48:14.229Z",
+            "referenceId": "69915dec32d641443d85b0b6",
+            "amount": 50,
+            "transactionId": "pi_3T0yBl93XxwmTnv21ncqhs3A",
+            "customerName": "lou",
+            "createdAt": "2026-02-15T05:48:14.230Z",
+            "updatedAt": "2026-02-15T05:48:14.230Z",
+            "__v": 0
+        },
+        {
+            "_id": "69915c67c3da422a54e7ff35",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-15T05:40:55.595Z",
+            "referenceId": "69915c37c3da422a54e7ff2d",
+            "amount": 50,
+            "transactionId": "pi_3T0y4h93XxwmTnv21UuyKvpY",
+            "customerName": "kjl",
+            "createdAt": "2026-02-15T05:40:55.596Z",
+            "updatedAt": "2026-02-15T05:40:55.596Z",
+            "__v": 0
+        },
+        {
+            "_id": "69915ac6f80bf3bec792e16a",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-15T05:33:58.020Z",
+            "referenceId": "69915a90f80bf3bec792e162",
+            "amount": 50,
+            "transactionId": "pi_3T0xxw93XxwmTnv210gDG7cm",
+            "customerName": "dfg",
+            "createdAt": "2026-02-15T05:33:58.021Z",
+            "updatedAt": "2026-02-15T05:33:58.021Z",
+            "__v": 0
+        },
+        {
+            "_id": "69914ddbbd5cb347bc08dc53",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-15T04:38:51.766Z",
+            "referenceId": "69914da3bd5cb347bc08dc4b",
+            "amount": 50,
+            "transactionId": "pi_3T0x6d93XxwmTnv21epJVLys",
+            "customerName": "jkhkj",
+            "createdAt": "2026-02-15T04:38:51.767Z",
+            "updatedAt": "2026-02-15T04:38:51.767Z",
+            "__v": 0
+        },
+        {
+            "_id": "69914cd7bd5cb347bc08dc3e",
+            "email": "saleva6552@azeriom.com",
+            "dateTime": "2026-02-15T04:34:31.278Z",
+            "referenceId": "69914c71bd5cb347bc08dc36",
+            "amount": 50,
+            "transactionId": "pi_3T0x2Q93XxwmTnv20tPjwxsk",
+            "customerName": "l;j",
+            "createdAt": "2026-02-15T04:34:31.280Z",
+            "updatedAt": "2026-02-15T04:34:31.280Z",
+            "__v": 0
         }
-    }
+    ]
 }
