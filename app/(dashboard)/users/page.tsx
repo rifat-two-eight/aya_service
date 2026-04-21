@@ -85,15 +85,14 @@ export default function UsersPage() {
       });
 
       if (response.success) {
-        setUsers(response.data.users);
-        setTotalPages(response.data.meta.totalPage);
-        setTotalCount(response.data.meta.total);
+        setUsers(response.data || []);
+        setTotalPages(response.meta?.totalPage || 1);
+        setTotalCount(response.meta?.total || 0);
 
-        // Update stats from the API static data if available
-        const total = response.data.staticData?.totalUsers || response.data.meta.total;
+        // Update stats
+        const total = response.meta?.total || 0;
         setStats(prev => prev.map(s => {
           if (s.title === "Total Users") return { ...s, value: total.toString() };
-          // For now, we only have totalUsers from staticData in api.txt
           return s;
         }));
       }
@@ -245,7 +244,7 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {!isLoading && users.map((user) => (
+            {!isLoading && users?.map((user) => (
               <tr
                 key={user._id}
                 className="border-b border-gray-100 hover:bg-gray-50"
@@ -311,7 +310,7 @@ export default function UsersPage() {
                 </td>
               </tr>
             ))}
-            {!isLoading && users.length === 0 && (
+            {!isLoading && users?.length === 0 && (
               <tr>
                 <td colSpan={6} className="py-12 text-center text-gray-500">
                   No users found matching your search.

@@ -90,7 +90,7 @@ export default function TransactionsPage() {
         // Update stats (calculating based on current page/total count for demo)
         const totalAmount = response.data.reduce((acc: number, item: any) => acc + (item.amount || 0), 0);
         const avg = response.data.length > 0 ? (totalAmount / response.data.length).toFixed(2) : 0;
-        
+
         setStats(prev => prev.map(s => {
           if (s.title === "Total Revenue") return { ...s, value: `$${totalAmount.toLocaleString()}` };
           if (s.title === "Avg Amount") return { ...s, value: `$${avg}` };
@@ -248,7 +248,7 @@ export default function TransactionsPage() {
               </tr>
             ))}
             {!isLoading && payments.length === 0 && (
-               <tr>
+              <tr>
                 <td colSpan={5} className="py-20 text-center text-gray-500 bg-gray-50">
                   No transactions found.
                 </td>
