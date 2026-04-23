@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,18 @@ export default function LoginPage() {
     remember: false,
   });
 
+  // Check for remembered email on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setFormData((prev) => ({
+        ...prev,
+        email: savedEmail,
+        remember: true,
+      }));
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -31,13 +42,21 @@ export default function LoginPage() {
       });
 
       if (response.success) {
+        // Handle "Remember Me" logic
+        if (formData.remember) {
+          localStorage.setItem("rememberedEmail", formData.email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
+
         toast.success(response.message || "You have been logged in successfully!");
         router.push("/dashboard");
       } else {
         toast.error(response.message || "Login failed. Please try again.");
       }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred during login. Please try again.");
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred during login. Please try again.";
+      toast.error(errorMessage);
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
@@ -97,7 +116,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Remember Me & Forgot Password */}
+            {/* Remember Me */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Checkbox
@@ -115,13 +134,6 @@ export default function LoginPage() {
                   Remember for 30 days
                 </Label>
               </div>
-
-              <Link
-                href="/forgot"
-                className="text-sm font-medium text-[#0C2A92] hover:underline"
-              >
-                Forgot password?
-              </Link>
             </div>
 
             {/* Login Button */}

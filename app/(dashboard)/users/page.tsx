@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,10 +26,7 @@ import {
   Eye,
   Trash2,
   Phone,
-  MapPin,
   Calendar,
-  Activity,
-  DollarSign,
   ChevronLeft,
   ChevronRight,
   Loader2,
@@ -75,7 +72,7 @@ export default function UsersPage() {
     },
   ]);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await userService.getUsers({
@@ -85,16 +82,23 @@ export default function UsersPage() {
       });
 
       if (response.success) {
-        setUsers(response.data || []);
-        setTotalPages(response.meta?.totalPage || 1);
-        setTotalCount(response.meta?.total || 0);
+        // According to api.txt, data contains { users: [], meta: {} }
+        const usersList = response.data?.users || [];
+        const meta = response.data?.meta;
+
+        setUsers(usersList);
+        setTotalPages(meta?.totalPage || 1);
+        setTotalCount(meta?.total || 0);
 
         // Update stats
-        const total = response.meta?.total || 0;
-        setStats(prev => prev.map(s => {
-          if (s.title === "Total Users") return { ...s, value: total.toString() };
-          return s;
-        }));
+        const total = meta?.total || 0;
+        setStats((prev) =>
+          prev.map((s) => {
+            if (s.title === "Total Users")
+              return { ...s, value: total.toString() };
+            return s;
+          })
+        );
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to fetch users");
@@ -102,11 +106,11 @@ export default function UsersPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, searchQuery]);
 
   useEffect(() => {
     fetchUsers();
-  }, [currentPage, searchQuery]);
+  }, [fetchUsers]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -267,12 +271,16 @@ export default function UsersPage() {
                 <td className="py-4 px-6">
                   <Badge
                     className={
-                      user.role === "client"
+                      user.role === "citizen"
                         ? "bg-gray-100 text-gray-700 hover:bg-gray-100"
-                        : "bg-blue-100 text-blue-700 hover:bg-blue-100"
+                        : user.role === "lawyer"
+                        ? "bg-blue-100 text-blue-700 hover:bg-blue-100"
+                        : user.role === "student"
+                        ? "bg-purple-100 text-purple-700 hover:bg-purple-100"
+                        : "bg-green-100 text-green-700 hover:bg-green-100"
                     }
                   >
-                    {user.role === "client" ? "Customer" : "Business"}
+                    {user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "N/A"}
                   </Badge>
                 </td>
                 <td className="py-4 px-6">
@@ -287,7 +295,7 @@ export default function UsersPage() {
                   </Badge>
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
-                  {user.phone || "N/A"}
+                  {user.phoneNumber || "N/A"}
                 </td>
                 <td className="py-4 px-6 text-sm text-gray-600">
                   {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
@@ -407,7 +415,7 @@ export default function UsersPage() {
                       <p className="text-xs font-medium">Phone</p>
                     </div>
                     <p className="text-sm font-semibold text-gray-900">
-                      {selectedUser.phone || "N/A"}
+                      {selectedUser.phoneNumber || "N/A"}
                     </p>
                   </div>
 
