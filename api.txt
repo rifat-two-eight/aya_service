@@ -1,133 +1,209 @@
+{{baseUrl}}/user
 {
     "statusCode": 200,
     "success": true,
-    "message": "Payments retrieved successfully",
-    "meta": {
-        "total": 16,
-        "limit": 10,
-        "page": 1,
-        "totalPage": 2
-    },
-    "data": [
-        {
-            "_id": "699e0cd85fae326aa6025ad4",
-            "email": "kofofe1970@esyline.com",
-            "dateTime": "2026-02-24T20:40:56.589Z",
-            "referenceId": "699e0cb45fae326aa6025acb",
-            "amount": 50,
-            "transactionId": "pi_3T4SPe93XxwmTnv21pNcCP3e",
-            "customerName": "gfg",
-            "createdAt": "2026-02-24T20:40:56.592Z",
-            "updatedAt": "2026-02-24T20:40:56.592Z",
-            "__v": 0
-        },
-        {
-            "_id": "699cef7e8ce2460a4c6adf15",
-            "email": "kofofe1970@esyline.com",
-            "dateTime": "2026-02-24T00:23:26.300Z",
-            "referenceId": "699cef648ce2460a4c6adf0c",
-            "amount": 50,
-            "transactionId": "pi_3T49PM93XxwmTnv21nFljAc8",
-            "customerName": "Fxgxgx",
-            "createdAt": "2026-02-24T00:23:26.302Z",
-            "updatedAt": "2026-02-24T00:23:26.302Z",
-            "__v": 0
-        },
-        {
-            "_id": "699cee238ce2460a4c6adeaf",
-            "email": "kofofe1970@esyline.com",
-            "dateTime": "2026-02-24T00:17:39.441Z",
-            "referenceId": "699cee038ce2460a4c6adea6",
-            "amount": 50,
-            "transactionId": "pi_3T49Jl93XxwmTnv20sA3rrET",
-            "customerName": "Cgcggc",
-            "createdAt": "2026-02-24T00:17:39.442Z",
-            "updatedAt": "2026-02-24T00:17:39.442Z",
-            "__v": 0
-        },
-        {
-            "_id": "699ceb7a8ce2460a4c6ade5b",
-            "email": "kofofe1970@esyline.com",
-            "dateTime": "2026-02-24T00:06:18.449Z",
-            "referenceId": "699ceb4e8ce2460a4c6ade52",
-            "amount": 50,
-            "transactionId": "pi_3T498m93XxwmTnv21GBokb77",
-            "customerName": "Ycgcggc",
-            "createdAt": "2026-02-24T00:06:18.458Z",
-            "updatedAt": "2026-02-24T00:06:18.458Z",
-            "__v": 0
-        },
-        {
-            "_id": "699bbfbafb523476d221efde",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-23T02:47:22.858Z",
-            "referenceId": "699bbf6efb523476d221efd4",
-            "amount": 494,
-            "transactionId": "pi_3T3pB693XxwmTnv21v0Sv7af",
-            "customerName": "jklkj",
-            "createdAt": "2026-02-23T02:47:22.859Z",
-            "updatedAt": "2026-02-23T02:47:22.859Z",
-            "__v": 0
-        },
-        {
-            "_id": "69915e1e32d641443d85b0be",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-15T05:48:14.229Z",
-            "referenceId": "69915dec32d641443d85b0b6",
-            "amount": 50,
-            "transactionId": "pi_3T0yBl93XxwmTnv21ncqhs3A",
-            "customerName": "lou",
-            "createdAt": "2026-02-15T05:48:14.230Z",
-            "updatedAt": "2026-02-15T05:48:14.230Z",
-            "__v": 0
-        },
-        {
-            "_id": "69915c67c3da422a54e7ff35",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-15T05:40:55.595Z",
-            "referenceId": "69915c37c3da422a54e7ff2d",
-            "amount": 50,
-            "transactionId": "pi_3T0y4h93XxwmTnv21UuyKvpY",
-            "customerName": "kjl",
-            "createdAt": "2026-02-15T05:40:55.596Z",
-            "updatedAt": "2026-02-15T05:40:55.596Z",
-            "__v": 0
-        },
-        {
-            "_id": "69915ac6f80bf3bec792e16a",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-15T05:33:58.020Z",
-            "referenceId": "69915a90f80bf3bec792e162",
-            "amount": 50,
-            "transactionId": "pi_3T0xxw93XxwmTnv210gDG7cm",
-            "customerName": "dfg",
-            "createdAt": "2026-02-15T05:33:58.021Z",
-            "updatedAt": "2026-02-15T05:33:58.021Z",
-            "__v": 0
-        },
-        {
-            "_id": "69914ddbbd5cb347bc08dc53",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-15T04:38:51.766Z",
-            "referenceId": "69914da3bd5cb347bc08dc4b",
-            "amount": 50,
-            "transactionId": "pi_3T0x6d93XxwmTnv21epJVLys",
-            "customerName": "jkhkj",
-            "createdAt": "2026-02-15T04:38:51.767Z",
-            "updatedAt": "2026-02-15T04:38:51.767Z",
-            "__v": 0
-        },
-        {
-            "_id": "69914cd7bd5cb347bc08dc3e",
-            "email": "saleva6552@azeriom.com",
-            "dateTime": "2026-02-15T04:34:31.278Z",
-            "referenceId": "69914c71bd5cb347bc08dc36",
-            "amount": 50,
-            "transactionId": "pi_3T0x2Q93XxwmTnv20tPjwxsk",
-            "customerName": "l;j",
-            "createdAt": "2026-02-15T04:34:31.280Z",
-            "updatedAt": "2026-02-15T04:34:31.280Z",
-            "__v": 0
+    "message": "Users fetched successfully",
+    "data": {
+        "users": [
+            {
+                "_id": "69e9a06d25d6e49c1f6364e6",
+                "fullName": "Virat Kohli",
+                "email": "beyihak702@4heats.com",
+                "image": "",
+                "phoneNumber": "+1234881984495",
+                "status": "active",
+                "verified": true,
+                "role": "citizen",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-23T04:30:37.147Z",
+                "updatedAt": "2026-04-23T04:32:09.631Z"
+            },
+            {
+                "_id": "69e99f9225d6e49c1f6364de",
+                "fullName": "Leonardo Lammie",
+                "email": "kelag29396@soppat.com",
+                "image": "",
+                "phoneNumber": "+1234881985495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-23T04:26:58.728Z",
+                "updatedAt": "2026-04-23T04:28:11.395Z"
+            },
+            {
+                "_id": "69e0a74ff4e21a0084b17ef6",
+                "fullName": "Virat Kohli",
+                "email": "dateva6015@sskaid.com",
+                "image": "",
+                "phoneNumber": "+1234881945495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:09:35.469Z",
+                "updatedAt": "2026-04-16T09:09:57.253Z"
+            },
+            {
+                "_id": "69e0a702f4e21a0084b17eee",
+                "fullName": "Mustafizur Rahman",
+                "email": "mabada5736@tatefarm.com",
+                "image": "",
+                "phoneNumber": "+1234881845495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:08:18.429Z",
+                "updatedAt": "2026-04-16T09:08:56.819Z"
+            },
+            {
+                "_id": "69e0a6b3f4e21a0084b17ee3",
+                "fullName": "Mr Fahim Doe",
+                "email": "mayipof609@tatefarm.com",
+                "image": "",
+                "phoneNumber": "+1234881885495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:06:59.596Z",
+                "updatedAt": "2026-04-16T09:07:22.821Z"
+            },
+            {
+                "_id": "69e0a680f4e21a0084b17edc",
+                "fullName": "Mr Fahim Doe",
+                "email": "seyobi1596@tatefarm.com",
+                "image": "",
+                "phoneNumber": "+1234581885495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:06:08.962Z",
+                "updatedAt": "2026-04-16T09:06:33.305Z"
+            },
+            {
+                "_id": "69e0a618f4e21a0084b17ed4",
+                "fullName": "MD EBRAHIM NAZMUL",
+                "email": "layakav654@tatefarm.com",
+                "image": "",
+                "phoneNumber": "+1234587885495",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:04:24.899Z",
+                "updatedAt": "2026-04-16T09:05:13.554Z"
+            },
+            {
+                "_id": "69e0a5caf4e21a0084b17ec8",
+                "fullName": "Leonardo",
+                "email": "cisaxe8737@tatefarm.com",
+                "image": "",
+                "phoneNumber": "+1234587885895",
+                "status": "active",
+                "verified": true,
+                "role": "lawyer",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-16T09:03:06.269Z",
+                "updatedAt": "2026-04-16T09:03:39.029Z"
+            },
+            {
+                "_id": "69df689fb2f201b9ff81f387",
+                "fullName": "John Citizen",
+                "email": "ibrahimsparktech@gmail.com",
+                "image": "",
+                "phoneNumber": "+1234585585888",
+                "status": "active",
+                "verified": true,
+                "role": "citizen",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-04-15T10:29:51.593Z",
+                "updatedAt": "2026-04-22T02:15:02.019Z"
+            },
+            {
+                "_id": "699fc0efb9982dbb2c697b6f",
+                "fullName": "Sadia Rahman",
+                "email": "nevoli9213@creteanu.com",
+                "image": "/image/1772077618307-k9rf54.jpg",
+                "phoneNumber": "+123455585887",
+                "status": "active",
+                "verified": true,
+                "role": "student",
+                "fcmToken": "",
+                "averageRating": 0,
+                "totalReviews": 0,
+                "isSubscribed": false,
+                "subscriptionExpiry": null,
+                "createdAt": "2026-02-26T03:41:35.597Z",
+                "updatedAt": "2026-04-14T09:46:04.190Z",
+                "currentYear": 3,
+                "studentIdOrEnrollmentProof": [
+                    "/studentIdOrEnrollmentProof/1772077618315-ywz7er.jpg",
+                    "/studentIdOrEnrollmentProof/1772077618315-yaacii.jpg"
+                ],
+                "university": "University of Dhaka"
+            }
+        ],
+        "meta": {
+            "total": 20,
+            "limit": 10,
+            "page": 1,
+            "totalPage": 2
         }
-    ]
+    }
+}
+
+
+{{baseUrl}}/user?role=business
+{
+    "statusCode": 200,
+    "success": true,
+    "message": "Users fetched successfully",
+    "data": {
+        "users": [],
+        "meta": {
+            "total": 0,
+            "limit": 10,
+            "page": 1,
+            "totalPage": 0
+        }
+    }
 }

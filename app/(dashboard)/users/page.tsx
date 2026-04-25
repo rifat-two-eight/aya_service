@@ -40,6 +40,7 @@ export default function UsersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [selectedRole, setSelectedRole] = useState<string>("all");
 
   const [stats, setStats] = useState([
     {
@@ -57,13 +58,6 @@ export default function UsersPage() {
       iconColor: "text-green-600",
     },
     {
-      icon: Building2,
-      title: "Business Owners",
-      value: "0",
-      bgColor: "bg-blue-100",
-      iconColor: "text-blue-600",
-    },
-    {
       icon: Clock,
       title: "Pending",
       value: "0",
@@ -75,14 +69,29 @@ export default function UsersPage() {
   const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
+      // Fetch main users list
       const response = await userService.getUsers({
         page: currentPage,
         limit: 10,
         searchTerm: searchQuery,
+        role: selectedRole === "all" ? undefined : selectedRole,
       });
 
+      // Fetch overall stats (Active and Pending) for the current role
+      const [activeRes, pendingRes] = await Promise.all([
+        userService.getUsers({ 
+          limit: 1, 
+          status: "active",
+          role: selectedRole === "all" ? undefined : selectedRole 
+        }),
+        userService.getUsers({ 
+          limit: 1, 
+          status: "pending",
+          role: selectedRole === "all" ? undefined : selectedRole 
+        }),
+      ]);
+
       if (response.success) {
-        // According to api.txt, data contains { users: [], meta: {} }
         const usersList = response.data?.users || [];
         const meta = response.data?.meta;
 
@@ -90,12 +99,16 @@ export default function UsersPage() {
         setTotalPages(meta?.totalPage || 1);
         setTotalCount(meta?.total || 0);
 
-        // Update stats
+        // Update stats using overall totals from meta
         const total = meta?.total || 0;
+        const activeTotal = activeRes.data?.meta?.total || 0;
+        const pendingTotal = pendingRes.data?.meta?.total || 0;
+
         setStats((prev) =>
           prev.map((s) => {
-            if (s.title === "Total Users")
-              return { ...s, value: total.toString() };
+            if (s.title === "Total Users") return { ...s, value: total.toString() };
+            if (s.title === "Active Users") return { ...s, value: activeTotal.toString() };
+            if (s.title === "Pending") return { ...s, value: pendingTotal.toString() };
             return s;
           })
         );
@@ -106,11 +119,16 @@ export default function UsersPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, selectedRole]);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
+
+  const handleRoleChange = (role: string) => {
+    setSelectedRole(role);
+    setCurrentPage(1);
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -171,7 +189,7 @@ export default function UsersPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
@@ -216,6 +234,49 @@ export default function UsersPage() {
           </form>
         </CardContent>
       </Card>
+      
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-gray-200 px-2">
+        <button
+          onClick={() => handleRoleChange("all")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            selectedRole === "all"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          All Users
+          {selectedRole === "all" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+        <button
+          onClick={() => handleRoleChange("client")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            selectedRole === "client"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Client
+          {selectedRole === "client" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+        <button
+          onClick={() => handleRoleChange("business")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            selectedRole === "business"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Business
+          {selectedRole === "business" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+      </div>
 
       {/* Users Table */}
       <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl min-h-[400px] relative">

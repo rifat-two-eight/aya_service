@@ -5,18 +5,20 @@ export interface UserFetchParams {
   limit?: number;
   searchTerm?: string;
   role?: string;
+  status?: string;
 }
 
 export const userService = {
   getUsers: async (params: UserFetchParams = {}) => {
     try {
-      const { page = 1, limit = 10, searchTerm = "", role } = params;
+      const { page = 1, limit = 10, searchTerm = "", role, status } = params;
       const response = await axiosInstance.get("/user", {
         params: {
           page,
           limit,
           searchTerm,
           ...(role && { role }),
+          ...(status && { status }),
         },
       });
       return response.data;
