@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -24,84 +24,19 @@ import {
   X,
   Check,
   Clock,
+  Loader2,
+  Search,
+  Filter,
 } from "lucide-react";
-
-const pendingNewBusinesses = [
-  {
-    id: 1,
-    name: "Halal Grill House",
-    category: "Restaurant",
-    description: "Authentic halal Mediterranean cuisine with traditional recipes",
-    owner: "Ahmed Ibrahim",
-    email: "ahmed@halalgrill.com",
-    phone: "(555) 234-5678",
-    location: "Downtown, Chicago",
-    documentsSubmitted: ["Articles of Organization"],
-    submittedDate: "2026-01-05",
-    type: "new",
-  },
-  {
-    id: 2,
-    name: "Premium Catering Services",
-    category: "Catering",
-    description: "Full-service halal catering for events, weddings, and corporate functions",
-    owner: "Fatima Hassan",
-    email: "fatima@premiumcater.com",
-    phone: "(555) 345-6789",
-    location: "West Side, New York",
-    documentsSubmitted: ["Articles of Organization"],
-    submittedDate: "2026-01-04",
-    type: "new",
-  },
-  {
-    id: 3,
-    name: "Elite Event Planning",
-    category: "Events",
-    description: "Professional event planning and coordination services",
-    owner: "Sarah Miller",
-    email: "sarah@eliteevent.com",
-    phone: "(555) 456-7890",
-    location: "Manhattan, New York",
-    documentsSubmitted: ["Articles of Organization"],
-    submittedDate: "2026-01-03",
-    type: "new",
-  },
-];
-
-const pendingProfileUpdates = [
-  {
-    id: 4,
-    name: "Tony's Italian Restaurant",
-    category: "Restaurant",
-    owner: "Tony Russo",
-    email: "tony@italianrest.com",
-    changes: [
-      "Added new location",
-      "Updated menu",
-      "New phone number",
-    ],
-    newLocation: "Updated: Now also serving in Brooklyn",
-    submittedDate: "2026-01-06",
-    type: "update",
-  },
-  {
-    id: 5,
-    name: "Quick Catering Services",
-    category: "Catering",
-    owner: "Sarah Miller",
-    email: "sarah@quickcater.com",
-    changes: [
-      "Expanded service area",
-      "Updated pricing",
-      "Added halal certification",
-    ],
-    newLocation: "Updated service area to include New Jersey",
-    submittedDate: "2026-01-05",
-    type: "update",
-  },
-];
+import { userService } from "@/services/userService";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function BusinessesPage() {
+  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"pending" | "approved" | "rejected">("pending");
+  const [searchQuery, setSearchQuery] = useState("");
+  
   const [rejectDialog, setRejectDialog] = useState<{
     open: boolean;
     business: any;
@@ -109,6 +44,28 @@ export default function BusinessesPage() {
   }>({ open: false, business: null, type: "approve" });
   const [rejectionReason, setRejectionReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fetchBusinesses = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const response = await userService.getUsers({
+        role: "business",
+        searchTerm: searchQuery,
+      });
+
+      if (response.success) {
+        setBusinesses(response.data?.users || []);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to fetch businesses");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    fetchBusinesses();
+  }, [fetchBusinesses]);
 
   const handleApprove = (business: any) => {
     setRejectDialog({ open: true, business, type: "approve" });
@@ -127,238 +84,276 @@ export default function BusinessesPage() {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const status = rejectDialog.type === "approve" ? "approved" : "rejected";
+      const response = await userService.updateBusinessStatus(rejectDialog.business._id, {
+        businessStatus: status,
+        ...(status === "rejected" && { rejectedReason: rejectionReason }),
+      });
 
-      if (rejectDialog.type === "approve") {
+      if (response.success) {
         toast.success(
-          `${rejectDialog.business.name} has been approved successfully!`
+          `${rejectDialog.business.business?.businessName || "Business"} has been ${status} successfully!`
         );
+        fetchBusinesses();
+        setRejectDialog({ open: false, business: null, type: "approve" });
+        setRejectionReason("");
       } else {
-        toast.success(
-          `${rejectDialog.business.name} has been rejected. Owner will be notified.`
-        );
+        toast.error(response.message || "Failed to update business status");
       }
-
-      setRejectDialog({ open: false, business: null, type: "approve" });
-      setRejectionReason("");
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const filteredBusinesses = businesses.filter((b) => {
+    const status = b.business?.businessStatus || "pending";
+    return status === activeTab;
+  });
+
+  const stats = {
+    pending: businesses.filter(b => (b.business?.businessStatus || "pending") === "pending").length,
+    approved: businesses.filter(b => b.business?.businessStatus === "approved").length,
+    rejected: businesses.filter(b => b.business?.businessStatus === "rejected").length,
+  };
+
   return (
     <div className="space-y-6 mx-10">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Business Management & Approvals
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          3 pending new businesses • 2 pending updates
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Business Management & Approvals
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            {stats.pending} pending • {stats.approved} approved • {stats.rejected} rejected
+          </p>
+        </div>
       </div>
 
-      {/* Pending New Businesses */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6">
+      {/* Tabs */}
+      <div className="flex gap-2 border-b border-gray-200">
+        <button
+          onClick={() => setActiveTab("pending")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            activeTab === "pending"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Pending ({stats.pending})
+          {activeTab === "pending" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab("approved")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            activeTab === "approved"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Approved ({stats.approved})
+          {activeTab === "approved" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab("rejected")}
+          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+            activeTab === "rejected"
+              ? "text-[#0A5C36]"
+              : "text-gray-500 hover:text-gray-700"
+          }`}
+        >
+          Rejected ({stats.rejected})
+          {activeTab === "rejected" && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A5C36]" />
+          )}
+        </button>
+      </div>
+
+      {/* Search Filter */}
+      <Card className="border-gray-200 rounded-2xl">
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                placeholder="Search by business name, owner, or email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 rounded-lg"
+              />
+            </div>
+            <Button variant="outline" className="border-gray-300 rounded-lg">
+              <Filter className="w-4 h-4 mr-2" />
+              Filters
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Businesses List */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 min-h-[400px] relative">
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-white/50 z-10">
+            <Loader2 className="w-8 h-8 animate-spin text-[#0A5C36]" />
+          </div>
+        )}
+
         <div className="flex items-center gap-2 mb-6">
-          <AlertCircle className="w-5 h-5 text-red-600" />
-          <h2 className="text-lg font-semibold text-gray-900">
-            Pending New Businesses (3)
+          {activeTab === "pending" ? (
+            <AlertCircle className="w-5 h-5 text-red-600" />
+          ) : activeTab === "approved" ? (
+            <CheckCircle className="w-5 h-5 text-green-600" />
+          ) : (
+            <X className="w-5 h-5 text-gray-600" />
+          )}
+          <h2 className="text-lg font-semibold text-gray-900 capitalize">
+            {activeTab} Businesses ({filteredBusinesses.length})
           </h2>
         </div>
 
         <div className="space-y-4">
-          {pendingNewBusinesses.map((business) => (
-            <div
-              key={business.id}
-              className="border border-gray-200 rounded-xl p-6 hover:shadow-sm transition-shadow"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex gap-4 flex-1">
-                  <Avatar className="w-14 h-14 bg-[#0A5C36]">
-                    <AvatarFallback className="bg-[#0A5C36] text-white">
-                      <Building2 className="w-7 h-7" />
-                    </AvatarFallback>
-                  </Avatar>
+          {filteredBusinesses.length > 0 ? (
+            filteredBusinesses.map((user) => (
+              <div
+                key={user._id}
+                className="border border-gray-200 rounded-xl p-6 hover:shadow-sm transition-shadow"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex gap-4 flex-1">
+                    <Avatar className="w-14 h-14 bg-[#0A5C36]">
+                      <AvatarImage src={user.business?.logo} />
+                      <AvatarFallback className="bg-[#0A5C36] text-white">
+                        <Building2 className="w-7 h-7" />
+                      </AvatarFallback>
+                    </Avatar>
 
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {business.name}
-                      </h3>
-                      <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-                        {business.category}
-                      </Badge>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {user.business?.businessName || "Unnamed Business"}
+                        </h3>
+                        <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
+                          {user.business?.category || "Business"}
+                        </Badge>
+                      </div>
+
+                      <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                        {user.business?.description || "No description provided."}
+                      </p>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 mb-4">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <User className="w-4 h-4" />
+                          <span>
+                            <strong>Owner:</strong> {user.fullName}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Mail className="w-4 h-4" />
+                          <span>{user.email}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Phone className="w-4 h-4" />
+                          <span>{user.phone || "N/A"}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <MapPin className="w-4 h-4" />
+                          <span>{user.business?.address || "N/A"}, {user.business?.city || ""}</span>
+                        </div>
+                      </div>
+
+                      {user.business?.primaryDocuments?.length > 0 && (
+                        <div className="mb-3">
+                          <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
+                            <FileText className="w-4 h-4" />
+                            <span className="font-medium">Documents Submitted:</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {user.business.primaryDocuments.map((doc: string, idx: number) => (
+                              <Badge
+                                key={idx}
+                                className="bg-green-100 text-green-700 hover:bg-green-100 cursor-pointer"
+                                onClick={() => window.open(doc, '_blank')}
+                              >
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Document {idx + 1}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <p className="text-xs text-gray-500">
+                        Joined: {new Date(user.createdAt).toLocaleDateString()}
+                      </p>
+                      
+                      {activeTab === "rejected" && user.business?.rejectedReason && (
+                        <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-lg">
+                          <p className="text-sm text-red-700">
+                            <strong>Rejection Reason:</strong> {user.business.rejectedReason}
+                          </p>
+                        </div>
+                      )}
                     </div>
-
-                    <p className="text-sm text-gray-600 mb-4">
-                      {business.description}
-                    </p>
-
-                    <div className="grid grid-cols-2 gap-x-8 gap-y-2 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <User className="w-4 h-4" />
-                        <span>
-                          <strong>Owner:</strong> {business.owner}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-4 h-4" />
-                        <span>{business.email}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Phone className="w-4 h-4" />
-                        <span>{business.phone}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <MapPin className="w-4 h-4" />
-                        <span>{business.location}</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
-                        <FileText className="w-4 h-4" />
-                        <span className="font-medium">Documents Submitted:</span>
-                      </div>
-                      <div className="flex gap-2">
-                        {business.documentsSubmitted.map((doc, idx) => (
-                          <Badge
-                            key={idx}
-                            className="bg-green-100 text-green-700 hover:bg-green-100"
-                          >
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            {doc}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-gray-500">
-                      Submitted: {business.submittedDate}
-                    </p>
                   </div>
-                </div>
 
-                <div className="flex flex-col gap-2">
-                  <Button
-                    onClick={() => handleApprove(business)}
-                    className="bg-[#0A5C36] hover:bg-[#154a2e] text-white rounded-lg min-w-25"
-                    size="sm"
-                  >
-                    <Check className="w-4 h-4 mr-1" />
-                    Approve
-                  </Button>
-                  <Button
-                    onClick={() => handleReject(business)}
-                    variant="destructive"
-                    className="bg-red-600 hover:bg-red-700 rounded-lg min-w-25"
-                    size="sm"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Reject
-                  </Button>
+                  {activeTab === "pending" && (
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        onClick={() => handleApprove(user)}
+                        className="bg-[#0A5C36] hover:bg-[#154a2e] text-white rounded-lg min-w-[100px]"
+                        size="sm"
+                      >
+                        <Check className="w-4 h-4 mr-1" />
+                        Approve
+                      </Button>
+                      <Button
+                        onClick={() => handleReject(user)}
+                        variant="destructive"
+                        className="bg-red-600 hover:bg-red-700 rounded-lg min-w-[100px]"
+                        size="sm"
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Reject
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {activeTab === "approved" && (
+                    <Button
+                      onClick={() => handleReject(user)}
+                      variant="outline"
+                      className="text-red-600 border-red-200 hover:bg-red-50 rounded-lg"
+                      size="sm"
+                    >
+                      Revoke Approval
+                    </Button>
+                  )}
+
+                  {activeTab === "rejected" && (
+                    <Button
+                      onClick={() => handleApprove(user)}
+                      variant="outline"
+                      className="text-[#0A5C36] border-[#0A5C36]/20 hover:bg-[#0A5C36]/5 rounded-lg"
+                      size="sm"
+                    >
+                      Re-approve
+                    </Button>
+                  )}
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="text-center py-20 text-gray-500">
+              {searchQuery ? "No businesses found matching your search." : `No ${activeTab} businesses found.`}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Pending Profile Updates */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <Clock className="w-5 h-5 text-yellow-600" />
-          <h2 className="text-lg font-semibold text-gray-900">
-            Pending Profile Updates (2)
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {pendingProfileUpdates.map((business) => (
-            <div
-              key={business.id}
-              className="border border-yellow-200 bg-yellow-50 rounded-xl p-6 hover:shadow-sm transition-shadow"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex gap-4 flex-1">
-                  <Avatar className="w-14 h-14 bg-orange-500">
-                    <AvatarFallback className="bg-orange-500 text-white">
-                      <Building2 className="w-7 h-7" />
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {business.name}
-                      </h3>
-                      <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100">
-                        {business.category} • Profile Update Request
-                      </Badge>
-                    </div>
-
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <User className="w-4 h-4" />
-                        <span>
-                          <strong>Owner:</strong> {business.owner}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Mail className="w-4 h-4" />
-                        <span>{business.email}</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-3">
-                      <p className="text-sm font-medium text-gray-700 mb-2">
-                        📝 Changes Requested:
-                      </p>
-                      <ul className="space-y-1 mb-3">
-                        {business.changes.map((change, idx) => (
-                          <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
-                            <span className="text-orange-500 mt-0.5">•</span>
-                            {change}
-                          </li>
-                        ))}
-                      </ul>
-                      <p className="text-sm text-gray-700">
-                        <strong>New Location:</strong> {business.newLocation}
-                      </p>
-                    </div>
-
-                    <p className="text-xs text-gray-500">
-                      Submitted: {business.submittedDate}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <Button
-                    onClick={() => handleApprove(business)}
-                    className="bg-[#0A5C36] hover:bg-[#154a2e] text-white rounded-lg min-w-25"
-                    size="sm"
-                  >
-                    <Check className="w-4 h-4 mr-1" />
-                    Approve
-                  </Button>
-                  <Button
-                    onClick={() => handleReject(business)}
-                    variant="destructive"
-                    className="bg-red-600 hover:bg-red-700 rounded-lg min-w-25"
-                    size="sm"
-                  >
-                    <X className="w-4 h-4 mr-1" />
-                    Reject
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -374,7 +369,7 @@ export default function BusinessesPage() {
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">
               {rejectDialog.type === "approve"
-                ? "Approve New Business"
+                ? "Approve Business"
                 : "Reject Business"}
             </DialogTitle>
           </DialogHeader>
@@ -382,13 +377,13 @@ export default function BusinessesPage() {
           {rejectDialog.business && (
             <div className="space-y-6 mt-4">
               {/* Business Info */}
-              <div className="bg-green-50 p-4 rounded-xl">
+              <div className="bg-green-50 p-4 rounded-xl border border-green-100">
                 <div className="flex items-center gap-3 mb-3">
                   <h3 className="text-lg font-semibold text-gray-900">
-                    {rejectDialog.business.name}
+                    {rejectDialog.business.business?.businessName || "Business"}
                   </h3>
                   <Badge className="bg-[#0A5C36] text-white hover:bg-[#0A5C36]">
-                    {rejectDialog.business.category}
+                    {rejectDialog.business.business?.category || "Business"}
                   </Badge>
                 </div>
 
@@ -396,7 +391,7 @@ export default function BusinessesPage() {
                   <div className="flex items-center gap-2 text-sm text-gray-700">
                     <User className="w-4 h-4" />
                     <span>
-                      <strong>Owner:</strong> {rejectDialog.business.owner}
+                      <strong>Owner:</strong> {rejectDialog.business.fullName}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-700">
@@ -404,26 +399,6 @@ export default function BusinessesPage() {
                     <span>{rejectDialog.business.email}</span>
                   </div>
                 </div>
-
-                {rejectDialog.business.documentsSubmitted && (
-                  <div className="mt-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 mb-2">
-                      <FileText className="w-4 h-4" />
-                      <span className="font-medium">Documents Submitted:</span>
-                    </div>
-                    <div className="flex gap-2">
-                      {rejectDialog.business.documentsSubmitted.map((doc: string, idx: number) => (
-                        <Badge
-                          key={idx}
-                          className="bg-green-100 text-green-700 hover:bg-green-100"
-                        >
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          {doc}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Rejection Reason */}
@@ -437,12 +412,19 @@ export default function BusinessesPage() {
                     placeholder="Provide detailed feedback here..."
                     value={rejectionReason}
                     onChange={(e) => setRejectionReason(e.target.value)}
-                    className="min-h-30 rounded-xl"
+                    className="min-h-[120px] rounded-xl border-gray-200 focus:border-[#0A5C36] focus:ring-[#0A5C36]"
                   />
                   <p className="text-xs text-gray-500 mt-2">
                     💡 Tip: Be specific so the business owner knows exactly what to fix
                   </p>
                 </div>
+              )}
+              
+              {rejectDialog.type === "approve" && (
+                <p className="text-sm text-gray-600">
+                  Are you sure you want to approve <strong>{rejectDialog.business.business?.businessName}</strong>? 
+                  They will be notified and their profile will become visible to users.
+                </p>
               )}
 
               {/* Action Buttons */}
@@ -465,7 +447,11 @@ export default function BusinessesPage() {
                     className="flex-1 bg-red-600 hover:bg-red-700 rounded-lg"
                     disabled={isSubmitting}
                   >
-                    <X className="w-4 h-4 mr-2" />
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <X className="w-4 h-4 mr-2" />
+                    )}
                     {isSubmitting ? "Rejecting..." : "Reject"}
                   </Button>
                 ) : (
@@ -474,7 +460,11 @@ export default function BusinessesPage() {
                     className="flex-1 bg-[#0A5C36] hover:bg-[#154a2e] text-white rounded-lg"
                     disabled={isSubmitting}
                   >
-                    <Check className="w-4 h-4 mr-2" />
+                    {isSubmitting ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Check className="w-4 h-4 mr-2" />
+                    )}
                     {isSubmitting ? "Approving..." : "Approve"}
                   </Button>
                 )}
@@ -484,5 +474,14 @@ export default function BusinessesPage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <input
+      className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+      {...props}
+    />
   );
 }

@@ -35,4 +35,13 @@ export const userService = {
       throw error.response?.data || error.message;
     }
   },
+
+  updateBusinessStatus: async (id: string, data: { businessStatus: string; rejectedReason?: string }) => {
+    try {
+      const response = await axiosInstance.patch(`/user/business-status/${id}`, data);
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
 };

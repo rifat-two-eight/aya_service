@@ -1,209 +1,285 @@
-{{baseUrl}}/user
 {
     "statusCode": 200,
     "success": true,
-    "message": "Users fetched successfully",
+    "message": "User fetched successfully",
     "data": {
         "users": [
             {
-                "_id": "69e9a06d25d6e49c1f6364e6",
-                "fullName": "Virat Kohli",
-                "email": "beyihak702@4heats.com",
+                "_id": "699df9725fae326aa60254dd",
+                "email": "bixodiy509@kaoing.com",
                 "image": "",
-                "phoneNumber": "+1234881984495",
+                "fullName": "Rimon",
                 "status": "active",
                 "verified": true,
-                "role": "citizen",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-23T04:30:37.147Z",
-                "updatedAt": "2026-04-23T04:32:09.631Z"
+                "createdAt": "2026-02-24T19:18:10.930Z",
+                "updatedAt": "2026-02-24T19:57:15.714Z",
+                "phone": "+88032423234",
+                "subscribe": true,
+                "business": {
+                    "businessName": "Flutter Developer ",
+                    "category": "699b77813ca8f28beee9057a",
+                    "description": "I/flutter (23458): Checkout Response Status: 200\nI/flutter (23458): Checkout Response Body: {\"url\":\"https://checkout.stripe.com/c/pay/cs_test_a15c1wk0wj3OiqZUHZshw7KzdRxvuNlBSfmhRUu6f2l4KtlDdOYy1HX6tx#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdkdWxOYHwnPyd1blpxYHZxWjA0V2ZwREA8Nl19cmhRa3M3MzM2UlFpfWhRNnJrRmdOa0xMRGJRSzJkMlRObm5RS0ZEQGhJMVdMb19UcXJUM01JckZrfUNxX29KdmRRf1xzYkdpfEJHNkRQNTVmYHYwcHNLSicpJ2N3amhWYHdzYHcnP3F3cGApJ2dkZm5id2pwa2FGamlqdyc%2FJyZjY2NjY2MnKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl\"}\n[GETX] CLOSE DIALOG 344073083\nD/BufferQueueProducer(23458): [SurfaceView[com.example.mahadinuru_app/com.example.mahadinuru_app.MainActivity]#1(BLAST Consumer)1](id:5ba200000001,api:1,p:23458,c:23458) queueBuffer: slot=4/4525 time=114164262800150 dataSpace=142671872 validHdrMetadataTypes=0x0 crop=[0,0,0,0] transform=0 scale=SCALE_TO_WINDOW",
+                    "yearsInBusiness": 1,
+                    "employeesCount": 9,
+                    "address": "Mohakhali Dhaka tb get",
+                    "city": "dhaka",
+                    "state": "mohakhali ",
+                    "zipCode": "1212",
+                    "website": "www.rimon.com",
+                    "logo": "/logo/1771962469302-izc41f.jpg",
+                    "primaryDocuments": [],
+                    "secondaryDocuments": [],
+                    "photos": [
+                        "/photos/1771962469304-d2kpvp.jpg",
+                        "/photos/1771962470768-1htz92.png",
+                        "/photos/1771962470836-vr0xqj.jpg",
+                        "/photos/1771962471624-pyqwt8.jpg"
+                    ],
+                    "facebook": "www.facebook.com",
+                    "instagram": "www.instagram.com",
+                    "twitter": "www.twitter.com",
+                    "businessStatus": "rejected",
+                    "stripeOnboardingCompleted": false,
+                    "_id": "699dfccb5fae326aa6025510"
+                }
             },
             {
-                "_id": "69e99f9225d6e49c1f6364de",
-                "fullName": "Leonardo Lammie",
-                "email": "kelag29396@soppat.com",
+                "_id": "699df7215fae326aa60254c9",
+                "email": "somok92803@kaoing.com",
                 "image": "",
-                "phoneNumber": "+1234881985495",
+                "fullName": "Romon",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-23T04:26:58.728Z",
-                "updatedAt": "2026-04-23T04:28:11.395Z"
+                "createdAt": "2026-02-24T19:08:17.040Z",
+                "updatedAt": "2026-02-24T19:09:20.561Z",
+                "phone": "+880455455"
             },
             {
-                "_id": "69e0a74ff4e21a0084b17ef6",
-                "fullName": "Virat Kohli",
-                "email": "dateva6015@sskaid.com",
+                "_id": "699df4b15fae326aa60254b3",
+                "email": "mosowo3463@netoiu.com",
                 "image": "",
-                "phoneNumber": "+1234881945495",
+                "fullName": "Rimon",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:09:35.469Z",
-                "updatedAt": "2026-04-16T09:09:57.253Z"
+                "createdAt": "2026-02-24T18:57:53.261Z",
+                "updatedAt": "2026-02-24T19:00:43.966Z",
+                "phone": "+8805365585858"
             },
             {
-                "_id": "69e0a702f4e21a0084b17eee",
-                "fullName": "Mustafizur Rahman",
-                "email": "mabada5736@tatefarm.com",
+                "_id": "6997822be56794644a3de166",
+                "email": "xocenig333@bitonc.com",
                 "image": "",
-                "phoneNumber": "+1234881845495",
+                "fullName": "Mizan",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:08:18.429Z",
-                "updatedAt": "2026-04-16T09:08:56.819Z"
+                "createdAt": "2026-02-19T21:35:39.096Z",
+                "updatedAt": "2026-02-19T21:36:10.746Z"
             },
             {
-                "_id": "69e0a6b3f4e21a0084b17ee3",
-                "fullName": "Mr Fahim Doe",
-                "email": "mayipof609@tatefarm.com",
+                "_id": "69977c8ae56794644a3de13a",
+                "email": "tedode5394@bitonc.com",
                 "image": "",
-                "phoneNumber": "+1234881885495",
+                "fullName": "saddsa",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:06:59.596Z",
-                "updatedAt": "2026-04-16T09:07:22.821Z"
+                "createdAt": "2026-02-19T21:11:38.672Z",
+                "updatedAt": "2026-02-19T23:39:37.871Z",
+                "phone": "+8805545454",
+                "subscribe": true,
+                "business": {
+                    "businessName": "flutter dev. It lmt",
+                    "category": "69882b37a99dd8b035f9a367",
+                    "description": "rewrewre dfsfds",
+                    "yearsInBusiness": 6,
+                    "employeesCount": 10,
+                    "address": "dhaka mohakhali 120",
+                    "city": "dhaka",
+                    "state": "121",
+                    "zipCode": "1010",
+                    "website": "www.sakil.com",
+                    "primaryDocuments": [],
+                    "secondaryDocuments": [],
+                    "photos": [],
+                    "facebook": "www.fgd.com",
+                    "instagram": "www.inst.com",
+                    "twitter": "www.tw.com",
+                    "businessHours": {
+                        "monday": {
+                            "from": "10:00",
+                            "to": "07:00"
+                        },
+                        "tuesday": {
+                            "from": "07:00",
+                            "to": "06:00"
+                        },
+                        "wednesday": {
+                            "from": "10:00",
+                            "to": "06:00"
+                        },
+                        "thursday": {
+                            "from": "00:00",
+                            "to": "00:00"
+                        },
+                        "friday": {
+                            "from": "00:00",
+                            "to": "00:00"
+                        },
+                        "saturday": {
+                            "from": "11:30",
+                            "to": "06:00"
+                        },
+                        "sunday": {
+                            "from": "00:00",
+                            "to": "00:00"
+                        }
+                    },
+                    "businessStatus": "approved",
+                    "rejectedReason": "your documents ar not valid  no",
+                    "stripeOnboardingCompleted": false,
+                    "_id": "69978392e56794644a3de172"
+                }
             },
             {
-                "_id": "69e0a680f4e21a0084b17edc",
-                "fullName": "Mr Fahim Doe",
-                "email": "seyobi1596@tatefarm.com",
+                "_id": "69977a05e56794644a3de12e",
+                "email": "hexiteb560@bitonc.com",
                 "image": "",
-                "phoneNumber": "+1234581885495",
+                "fullName": "dsfdfs",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:06:08.962Z",
-                "updatedAt": "2026-04-16T09:06:33.305Z"
+                "createdAt": "2026-02-19T21:00:53.076Z",
+                "updatedAt": "2026-02-19T21:01:24.929Z"
             },
             {
-                "_id": "69e0a618f4e21a0084b17ed4",
-                "fullName": "MD EBRAHIM NAZMUL",
-                "email": "layakav654@tatefarm.com",
+                "_id": "699777e4e56794644a3de11f",
+                "email": "xedafi8971@esyline.com",
                 "image": "",
-                "phoneNumber": "+1234587885495",
+                "fullName": "dffgdgf",
                 "status": "active",
-                "verified": true,
-                "role": "lawyer",
+                "verified": false,
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:04:24.899Z",
-                "updatedAt": "2026-04-16T09:05:13.554Z"
+                "createdAt": "2026-02-19T20:51:48.871Z",
+                "updatedAt": "2026-02-19T20:51:48.871Z"
             },
             {
-                "_id": "69e0a5caf4e21a0084b17ec8",
-                "fullName": "Leonardo",
-                "email": "cisaxe8737@tatefarm.com",
+                "_id": "699776eae56794644a3de110",
+                "email": "ratijor476@esyline.com",
                 "image": "",
-                "phoneNumber": "+1234587885895",
+                "fullName": "dsffds",
                 "status": "active",
                 "verified": true,
-                "role": "lawyer",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-16T09:03:06.269Z",
-                "updatedAt": "2026-04-16T09:03:39.029Z"
+                "createdAt": "2026-02-19T20:47:38.957Z",
+                "updatedAt": "2026-02-19T20:48:27.963Z"
             },
             {
-                "_id": "69df689fb2f201b9ff81f387",
-                "fullName": "John Citizen",
-                "email": "ibrahimsparktech@gmail.com",
+                "_id": "699767e7e56794644a3de0fe",
+                "email": "dahig43201@bitonc.com",
                 "image": "",
-                "phoneNumber": "+1234585585888",
+                "fullName": "Sakil Hossen",
                 "status": "active",
                 "verified": true,
-                "role": "citizen",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-04-15T10:29:51.593Z",
-                "updatedAt": "2026-04-22T02:15:02.019Z"
+                "createdAt": "2026-02-19T19:43:35.153Z",
+                "updatedAt": "2026-02-19T19:45:06.908Z",
+                "phone": "+88045534445"
             },
             {
-                "_id": "699fc0efb9982dbb2c697b6f",
-                "fullName": "Sadia Rahman",
-                "email": "nevoli9213@creteanu.com",
-                "image": "/image/1772077618307-k9rf54.jpg",
-                "phoneNumber": "+123455585887",
+                "_id": "69971748e56794644a3de06d",
+                "email": "rigis90380@esyline.com",
+                "image": "",
+                "fullName": "Mizan",
                 "status": "active",
                 "verified": true,
-                "role": "student",
+                "role": "business",
                 "fcmToken": "",
-                "averageRating": 0,
-                "totalReviews": 0,
-                "isSubscribed": false,
-                "subscriptionExpiry": null,
-                "createdAt": "2026-02-26T03:41:35.597Z",
-                "updatedAt": "2026-04-14T09:46:04.190Z",
-                "currentYear": 3,
-                "studentIdOrEnrollmentProof": [
-                    "/studentIdOrEnrollmentProof/1772077618315-ywz7er.jpg",
-                    "/studentIdOrEnrollmentProof/1772077618315-yaacii.jpg"
-                ],
-                "university": "University of Dhaka"
+                "createdAt": "2026-02-19T13:59:36.646Z",
+                "updatedAt": "2026-02-19T19:36:04.178Z",
+                "phone": "+8801615005256",
+                "subscribe": true,
+                "business": {
+                    "businessName": "Tech Solutions Ltd.",
+                    "category": "69882b37a99dd8b035f9a367",
+                    "description": "Leading provider of innovative tech solutions and software development.",
+                    "yearsInBusiness": 5,
+                    "employeesCount": 25,
+                    "address": "123 Tech Park, Innovation Drive",
+                    "city": "Dhaka",
+                    "state": "mohakhali",
+                    "zipCode": "1212",
+                    "website": "https://www.techsolutions.example.com",
+                    "logo": "/logo/1771510282734-907fn2.png",
+                    "primaryDocuments": [
+                        "/primaryDocuments/1771510282778-t0bje2.pdf"
+                    ],
+                    "secondaryDocuments": [
+                        "/secondaryDocuments/1771510282773-5qzucu.pdf"
+                    ],
+                    "photos": [
+                        "/photos/1771510282772-is8r0l.png"
+                    ],
+                    "facebook": "https://facebook.com/techsolutions",
+                    "instagram": "https://instagram.com/techsolutions",
+                    "twitter": "https://twitter.com/techsolutions",
+                    "businessHours": {
+                        "monday": {
+                            "from": "09:00",
+                            "to": "17:00"
+                        },
+                        "tuesday": {
+                            "from": "09:00",
+                            "to": "17:00"
+                        },
+                        "wednesday": {
+                            "from": "09:00",
+                            "to": "17:00"
+                        },
+                        "thursday": {
+                            "from": "09:00",
+                            "to": "17:00"
+                        },
+                        "friday": {
+                            "from": "09:00",
+                            "to": "17:00"
+                        },
+                        "saturday": {
+                            "from": "10:00",
+                            "to": "14:00"
+                        },
+                        "sunday": {
+                            "from": "00:00",
+                            "to": "00:00"
+                        }
+                    },
+                    "businessStatus": "approved",
+                    "stripeOnboardingCompleted": false,
+                    "_id": "699719aee56794644a3de093",
+                    "rejectedReason": "your documents ar not valid"
+                }
             }
         ],
+        "staticData": {
+            "totalUsers": 20
+        },
         "meta": {
-            "total": 20,
+            "total": 14,
             "limit": 10,
             "page": 1,
             "totalPage": 2
-        }
-    }
-}
-
-
-{{baseUrl}}/user?role=business
-{
-    "statusCode": 200,
-    "success": true,
-    "message": "Users fetched successfully",
-    "data": {
-        "users": [],
-        "meta": {
-            "total": 0,
-            "limit": 10,
-            "page": 1,
-            "totalPage": 0
         }
     }
 }
