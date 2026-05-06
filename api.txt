@@ -1,285 +1,50 @@
 {
     "statusCode": 200,
     "success": true,
-    "message": "User fetched successfully",
+    "message": "Notifications retrieved successfully",
     "data": {
-        "users": [
+        "notifications": [
             {
-                "_id": "699df9725fae326aa60254dd",
-                "email": "bixodiy509@kaoing.com",
-                "image": "",
-                "fullName": "Rimon",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T19:18:10.930Z",
-                "updatedAt": "2026-02-24T19:57:15.714Z",
-                "phone": "+88032423234",
-                "subscribe": true,
-                "business": {
-                    "businessName": "Flutter Developer ",
-                    "category": "699b77813ca8f28beee9057a",
-                    "description": "I/flutter (23458): Checkout Response Status: 200\nI/flutter (23458): Checkout Response Body: {\"url\":\"https://checkout.stripe.com/c/pay/cs_test_a15c1wk0wj3OiqZUHZshw7KzdRxvuNlBSfmhRUu6f2l4KtlDdOYy1HX6tx#fidnandhYHdWcXxpYCc%2FJ2FgY2RwaXEnKSdkdWxOYHwnPyd1blpxYHZxWjA0V2ZwREA8Nl19cmhRa3M3MzM2UlFpfWhRNnJrRmdOa0xMRGJRSzJkMlRObm5RS0ZEQGhJMVdMb19UcXJUM01JckZrfUNxX29KdmRRf1xzYkdpfEJHNkRQNTVmYHYwcHNLSicpJ2N3amhWYHdzYHcnP3F3cGApJ2dkZm5id2pwa2FGamlqdyc%2FJyZjY2NjY2MnKSdpZHxqcHFRfHVgJz8ndmxrYmlgWmxxYGgnKSdga2RnaWBVaWRmYG1qaWFgd3YnP3F3cGB4JSUl\"}\n[GETX] CLOSE DIALOG 344073083\nD/BufferQueueProducer(23458): [SurfaceView[com.example.mahadinuru_app/com.example.mahadinuru_app.MainActivity]#1(BLAST Consumer)1](id:5ba200000001,api:1,p:23458,c:23458) queueBuffer: slot=4/4525 time=114164262800150 dataSpace=142671872 validHdrMetadataTypes=0x0 crop=[0,0,0,0] transform=0 scale=SCALE_TO_WINDOW",
-                    "yearsInBusiness": 1,
-                    "employeesCount": 9,
-                    "address": "Mohakhali Dhaka tb get",
-                    "city": "dhaka",
-                    "state": "mohakhali ",
-                    "zipCode": "1212",
-                    "website": "www.rimon.com",
-                    "logo": "/logo/1771962469302-izc41f.jpg",
-                    "primaryDocuments": [],
-                    "secondaryDocuments": [],
-                    "photos": [
-                        "/photos/1771962469304-d2kpvp.jpg",
-                        "/photos/1771962470768-1htz92.png",
-                        "/photos/1771962470836-vr0xqj.jpg",
-                        "/photos/1771962471624-pyqwt8.jpg"
-                    ],
-                    "facebook": "www.facebook.com",
-                    "instagram": "www.instagram.com",
-                    "twitter": "www.twitter.com",
-                    "businessStatus": "rejected",
-                    "stripeOnboardingCompleted": false,
-                    "_id": "699dfccb5fae326aa6025510"
-                }
+                "_id": "699bbfbafb523476d221efe4",
+                "title": "Payment Successful",
+                "message": "Your payment for laksns was successful. The booking is now pending provider confirmation.",
+                "receiver": "698847401039ad8f98341fce",
+                "referenceId": "699bbf6efb523476d221efd4",
+                "read": false,
+                "type": "client",
+                "createdAt": "2026-02-23T02:47:22.874Z",
+                "updatedAt": "2026-02-23T02:47:22.874Z",
+                "__v": 0
             },
             {
-                "_id": "699df7215fae326aa60254c9",
-                "email": "somok92803@kaoing.com",
-                "image": "",
-                "fullName": "Romon",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T19:08:17.040Z",
-                "updatedAt": "2026-02-24T19:09:20.561Z",
-                "phone": "+880455455"
-            },
-            {
-                "_id": "699df4b15fae326aa60254b3",
-                "email": "mosowo3463@netoiu.com",
-                "image": "",
-                "fullName": "Rimon",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-24T18:57:53.261Z",
-                "updatedAt": "2026-02-24T19:00:43.966Z",
-                "phone": "+8805365585858"
-            },
-            {
-                "_id": "6997822be56794644a3de166",
-                "email": "xocenig333@bitonc.com",
-                "image": "",
-                "fullName": "Mizan",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T21:35:39.096Z",
-                "updatedAt": "2026-02-19T21:36:10.746Z"
-            },
-            {
-                "_id": "69977c8ae56794644a3de13a",
-                "email": "tedode5394@bitonc.com",
-                "image": "",
-                "fullName": "saddsa",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T21:11:38.672Z",
-                "updatedAt": "2026-02-19T23:39:37.871Z",
-                "phone": "+8805545454",
-                "subscribe": true,
-                "business": {
-                    "businessName": "flutter dev. It lmt",
-                    "category": "69882b37a99dd8b035f9a367",
-                    "description": "rewrewre dfsfds",
-                    "yearsInBusiness": 6,
-                    "employeesCount": 10,
-                    "address": "dhaka mohakhali 120",
-                    "city": "dhaka",
-                    "state": "121",
-                    "zipCode": "1010",
-                    "website": "www.sakil.com",
-                    "primaryDocuments": [],
-                    "secondaryDocuments": [],
-                    "photos": [],
-                    "facebook": "www.fgd.com",
-                    "instagram": "www.inst.com",
-                    "twitter": "www.tw.com",
-                    "businessHours": {
-                        "monday": {
-                            "from": "10:00",
-                            "to": "07:00"
-                        },
-                        "tuesday": {
-                            "from": "07:00",
-                            "to": "06:00"
-                        },
-                        "wednesday": {
-                            "from": "10:00",
-                            "to": "06:00"
-                        },
-                        "thursday": {
-                            "from": "00:00",
-                            "to": "00:00"
-                        },
-                        "friday": {
-                            "from": "00:00",
-                            "to": "00:00"
-                        },
-                        "saturday": {
-                            "from": "11:30",
-                            "to": "06:00"
-                        },
-                        "sunday": {
-                            "from": "00:00",
-                            "to": "00:00"
-                        }
-                    },
-                    "businessStatus": "approved",
-                    "rejectedReason": "your documents ar not valid  no",
-                    "stripeOnboardingCompleted": false,
-                    "_id": "69978392e56794644a3de172"
-                }
-            },
-            {
-                "_id": "69977a05e56794644a3de12e",
-                "email": "hexiteb560@bitonc.com",
-                "image": "",
-                "fullName": "dsfdfs",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T21:00:53.076Z",
-                "updatedAt": "2026-02-19T21:01:24.929Z"
-            },
-            {
-                "_id": "699777e4e56794644a3de11f",
-                "email": "xedafi8971@esyline.com",
-                "image": "",
-                "fullName": "dffgdgf",
-                "status": "active",
-                "verified": false,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T20:51:48.871Z",
-                "updatedAt": "2026-02-19T20:51:48.871Z"
-            },
-            {
-                "_id": "699776eae56794644a3de110",
-                "email": "ratijor476@esyline.com",
-                "image": "",
-                "fullName": "dsffds",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T20:47:38.957Z",
-                "updatedAt": "2026-02-19T20:48:27.963Z"
-            },
-            {
-                "_id": "699767e7e56794644a3de0fe",
-                "email": "dahig43201@bitonc.com",
-                "image": "",
-                "fullName": "Sakil Hossen",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T19:43:35.153Z",
-                "updatedAt": "2026-02-19T19:45:06.908Z",
-                "phone": "+88045534445"
-            },
-            {
-                "_id": "69971748e56794644a3de06d",
-                "email": "rigis90380@esyline.com",
-                "image": "",
-                "fullName": "Mizan",
-                "status": "active",
-                "verified": true,
-                "role": "business",
-                "fcmToken": "",
-                "createdAt": "2026-02-19T13:59:36.646Z",
-                "updatedAt": "2026-02-19T19:36:04.178Z",
-                "phone": "+8801615005256",
-                "subscribe": true,
-                "business": {
-                    "businessName": "Tech Solutions Ltd.",
-                    "category": "69882b37a99dd8b035f9a367",
-                    "description": "Leading provider of innovative tech solutions and software development.",
-                    "yearsInBusiness": 5,
-                    "employeesCount": 25,
-                    "address": "123 Tech Park, Innovation Drive",
-                    "city": "Dhaka",
-                    "state": "mohakhali",
-                    "zipCode": "1212",
-                    "website": "https://www.techsolutions.example.com",
-                    "logo": "/logo/1771510282734-907fn2.png",
-                    "primaryDocuments": [
-                        "/primaryDocuments/1771510282778-t0bje2.pdf"
-                    ],
-                    "secondaryDocuments": [
-                        "/secondaryDocuments/1771510282773-5qzucu.pdf"
-                    ],
-                    "photos": [
-                        "/photos/1771510282772-is8r0l.png"
-                    ],
-                    "facebook": "https://facebook.com/techsolutions",
-                    "instagram": "https://instagram.com/techsolutions",
-                    "twitter": "https://twitter.com/techsolutions",
-                    "businessHours": {
-                        "monday": {
-                            "from": "09:00",
-                            "to": "17:00"
-                        },
-                        "tuesday": {
-                            "from": "09:00",
-                            "to": "17:00"
-                        },
-                        "wednesday": {
-                            "from": "09:00",
-                            "to": "17:00"
-                        },
-                        "thursday": {
-                            "from": "09:00",
-                            "to": "17:00"
-                        },
-                        "friday": {
-                            "from": "09:00",
-                            "to": "17:00"
-                        },
-                        "saturday": {
-                            "from": "10:00",
-                            "to": "14:00"
-                        },
-                        "sunday": {
-                            "from": "00:00",
-                            "to": "00:00"
-                        }
-                    },
-                    "businessStatus": "approved",
-                    "stripeOnboardingCompleted": false,
-                    "_id": "699719aee56794644a3de093",
-                    "rejectedReason": "your documents ar not valid"
-                }
+                "_id": "699cc4208ce2460a4c6ad838",
+                "title": "Booking Accepted",
+                "message": "Your booking for laksns has been accepted by Updated Name.",
+                "receiver": "698847401039ad8f98341fce",
+                "referenceId": "699bbf6efb523476d221efd4",
+                "read": false,
+                "type": "client",
+                "createdAt": "2026-02-23T21:18:24.686Z",
+                "updatedAt": "2026-02-23T21:18:24.686Z",
+                "__v": 0
             }
         ],
-        "staticData": {
-            "totalUsers": 20
-        },
-        "meta": {
-            "total": 14,
+        "pagination": {
+            "total": 2,
             "limit": 10,
             "page": 1,
-            "totalPage": 2
-        }
+            "totalPage": 1
+        },
+        "unreadCount": 2
     }
+}
+
+
+
+
+
+{
+    "statusCode": 200,
+    "success": true,
+    "message": "Unread notification count retrieved successfully"
 }

@@ -9,19 +9,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { authService } from "@/services/authService";
 
 export default function BusinessLoginPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            const response = await authService.login(formData, 'business');
+            if (response.success) {
+                toast.success(response.message || "Login successful!");
+                router.push("/business");
+            } else {
+                toast.error(response.message || "Login failed");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Something went wrong. Please try again.");
+        } finally {
             setIsLoading(false);
-            router.push("/business");
-        }, 1500);
+        }
     };
 
     return (
@@ -37,8 +51,8 @@ export default function BusinessLoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-gray-900">AYA Shop</h1>
-                    <p className="text-gray-500 font-medium text-lg">Sign in to your account</p>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Business Login</h1>
+                    <p className="text-gray-500 font-medium text-lg">Welcome back to AYA Shop</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -49,6 +63,8 @@ export default function BusinessLoginPage() {
                             type="email"
                             placeholder="Enter your email"
                             required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             className="h-14 rounded-xl border-gray-100 bg-gray-50 focus:bg-white transition-all"
                             disabled={isLoading}
                         />
@@ -67,6 +83,8 @@ export default function BusinessLoginPage() {
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Enter your password"
                                 required
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 className="h-14 rounded-xl border-gray-100 bg-gray-50 focus:bg-white transition-all pr-12"
                                 disabled={isLoading}
                             />

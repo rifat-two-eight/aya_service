@@ -179,6 +179,7 @@ export default function OTPVerifyPage() {
           fill
           className="object-cover"
           priority
+          unoptimized={true}
         />
       </div>
     </div>

@@ -50,12 +50,12 @@ export default function OnboardingPage() {
     if (step < slides.length - 1) {
       setStep(step + 1);
     } else {
-      setStep(3); // Role selection
+      router.push("/auth");
     }
   };
 
   const skip = () => {
-    setStep(3);
+    router.push("/auth");
   };
 
   if (step === -1) {
@@ -69,56 +69,8 @@ export default function OnboardingPage() {
             height={160}
             className="object-contain"
             priority
+            unoptimized={true}
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (step === 3) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white p-6 md:p-12">
-        <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="hidden lg:flex flex-col items-center justify-center space-y-6 p-8 bg-gray-50 rounded-2xl h-full min-h-[480px]">
-            <div className="relative w-40 h-40">
-              <Image src="/logo.svg" alt="Logo" fill className="object-contain" />
-            </div>
-            <div className="text-center space-y-2">
-              <h2 className="text-2xl font-semibold text-gray-900">Welcome to AYA Shop</h2>
-              <p className="text-gray-500 max-w-sm">Manage your business or find local services with ease.</p>
-            </div>
-          </div>
-
-          <div className="space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-2xl md:text-4xl font-semibold text-gray-900 tracking-tight">Select your role</h2>
-              <p className="text-base text-gray-500">How would you like to use the platform today?</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              <RoleCard
-                icon={<User className="w-8 h-8 text-white" />}
-                title="Client"
-                description="Find the right business professional for your needs"
-                onClick={() => router.push("/client/login")}
-                iconBg=""
-              />
-              <RoleCard
-                icon={<Briefcase className="w-8 h-8 text-white" />}
-                title="Business"
-                description="Highlight your work and expand your business reach"
-                onClick={() => router.push("/business/login")}
-                iconBg=""
-              />
-              <RoleCard
-                icon={<ShieldCheck className="w-8 h-8 text-white" />}
-                title="Admin"
-                description="Manage platform operations and user activities"
-                onClick={() => router.push("/login")}
-                iconBg=""
-              />
-            </div>
-          </div>
         </div>
       </div>
     );
@@ -147,7 +99,7 @@ export default function OnboardingPage() {
 
           <div key={step} className="flex-1 flex flex-col justify-center space-y-6">
             <div className="lg:hidden w-20 h-20 mb-2">
-              <Image src="/logo.svg" alt="Logo" width={80} height={80} />
+              <Image src="/logo.svg" alt="Logo" width={80} height={80} unoptimized={true} />
             </div>
 
             <div className="space-y-4">
@@ -181,29 +133,5 @@ export default function OnboardingPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-type RoleCardProps = {
-  icon: ReactNode;
-  title: string;
-  description: string;
-  onClick: () => void;
-  iconBg?: string;
-};
-
-function RoleCard({ icon, title, description, onClick }: RoleCardProps) {
-  return (
-    <button
-      onClick={onClick}
-      className="w-full flex items-center gap-5 p-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors text-left bg-white"
-    >
-      <div className="bg-[#0A5C36] p-3 rounded-xl text-white">{icon}</div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-900 text-base">{title}</h3>
-        <p className="text-sm text-gray-500 truncate">{description}</p>
-      </div>
-      <ChevronRight className="w-5 h-5 text-gray-400" />
-    </button>
   );
 }

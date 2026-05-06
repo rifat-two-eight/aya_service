@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function BusinessSignupPage() {
+export default function ClientSignupPage() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -19,7 +19,8 @@ export default function BusinessSignupPage() {
         setIsLoading(true);
         setTimeout(() => {
             setIsLoading(false);
-            router.push("/business/login");
+            // In a real app, we would register the user with 'client' role here
+            router.push("/client/login");
         }, 1500);
     };
 
@@ -36,8 +37,8 @@ export default function BusinessSignupPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Business Registration</h1>
-                    <p className="text-gray-500 font-medium text-lg">Create your business account</p>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Client Registration</h1>
+                    <p className="text-gray-500 font-medium text-lg">Create your account to get started</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -53,7 +54,7 @@ export default function BusinessSignupPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email</Label>
+                        <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email Address</Label>
                         <Input
                             id="email"
                             type="email"
@@ -70,7 +71,7 @@ export default function BusinessSignupPage() {
                             <Input
                                 id="password"
                                 type={showPassword ? "text" : "password"}
-                                placeholder="Enter your password"
+                                placeholder="Create a password"
                                 required
                                 className="h-14 rounded-xl border-gray-100 bg-gray-50 focus:bg-white transition-all pr-12"
                                 disabled={isLoading}
@@ -112,11 +113,11 @@ export default function BusinessSignupPage() {
                             className="w-full h-16 rounded-2xl bg-[#0A5C36] hover:bg-[#0d7344] text-white text-xl font-bold transition-all active:scale-[0.97] shadow-xl shadow-green-900/10"
                             disabled={isLoading}
                         >
-                            {isLoading ? "Signing up..." : "Sign Up"}
+                            {isLoading ? "Creating account..." : "Sign Up"}
                         </Button>
 
                         <p className="text-center text-gray-500 font-medium">
-                            Already have an account? <Link href="/business/login" className="text-[#0A5C36] font-bold hover:underline">Sign In</Link>
+                            Already have an account? <Link href="/client/login" className="text-[#0A5C36] font-bold hover:underline">Sign In</Link>
                         </p>
                     </div>
                 </form>

@@ -1,170 +1,122 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Bell, ChevronLeft, CheckCircle2, CreditCard, Gift, Info, Trash2, CheckCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-
-const initialNotifications = [
-    {
-        id: 1,
-        title: "Booking Confirmed",
-        description: "Your cleaning service booking for Jan 5 has been confirmed",
-        time: "Just now",
-        timestamp: new Date().getTime(),
-        type: "booking",
-        icon: <CheckCircle2 className="w-6 h-6 text-white" />,
-        iconBg: "bg-[#0A5C36]",
-        unread: true
-    },
-    {
-        id: 2,
-        title: "Payment Successful",
-        description: "Payment of BDT 2,500 received successfully",
-        time: "2 hours ago",
-        timestamp: new Date().getTime() - 2 * 60 * 60 * 1000,
-        type: "payment",
-        icon: <CreditCard className="w-6 h-6 text-white" />,
-        iconBg: "bg-blue-500",
-        unread: true
-    },
-    {
-        id: 3,
-        title: "New Offer Available",
-        description: "Special discount on electrical services this week",
-        time: "1 day ago",
-        timestamp: new Date().getTime() - 24 * 60 * 60 * 1000,
-        type: "promo",
-        icon: <Gift className="w-6 h-6 text-white" />,
-        iconBg: "bg-orange-500",
-        unread: false
-    },
-    {
-        id: 4,
-        title: "Schedule Update",
-        description: "Your plumber is on his way and will arrive within 30 minutes.",
-        time: "Yesterday",
-        timestamp: new Date().getTime() - 30 * 60 * 60 * 1000,
-        type: "booking",
-        icon: <Info className="w-6 h-6 text-white" />,
-        iconBg: "bg-[#0A5C36]",
-        unread: false
-    },
-    {
-        id: 5,
-        title: "Security Alert",
-        description: "A new login was detected on your account from Barcelona.",
-        time: "3 days ago",
-        timestamp: new Date().getTime() - 3 * 24 * 60 * 60 * 1000,
-        type: "security",
-        icon: <Bell className="w-6 h-6 text-white" />,
-        iconBg: "bg-red-500",
-        unread: false
-    }
-];
+import { useState, useEffect } from "react";
+import { notificationService } from "@/services/notificationService";
+import { Bell, CheckCircle2, Clock, ShieldCheck, CreditCard, CalendarCheck, X } from "lucide-react";
+import Link from "next/link";
+import { toast } from "sonner";
+import { formatDistanceToNow } from "date-fns";
 
 export default function NotificationsPage() {
-    const router = useRouter();
-    const [notifs, setNotifs] = useState(initialNotifications);
-    const [filter, setFilter] = useState("all");
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const filteredNotifs = useMemo(() => {
-        if (filter === "all") return notifs;
-        if (filter === "unread") return notifs.filter(n => n.unread);
-        return notifs.filter(n => n.type === filter);
-    }, [notifs, filter]);
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
 
-    const markRead = (id: number) => {
-        setNotifs(notifs.map(n => n.id === id ? { ...n, unread: false } : n));
+    const fetchNotifications = async () => {
+        try {
+            const response = await notificationService.getNotifications();
+            if (response.success) {
+                // Determine structure based on API response
+                const notifs = response.data?.notifications || response.data || [];
+                setNotifications(notifs);
+            }
+        } catch (error: any) {
+            console.error("Error fetching notifications:", error);
+            toast.error("Failed to load notifications");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
+    const getIcon = (title: string) => {
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes("payment")) return <CreditCard className="w-5 h-5 text-blue-500" />;
+        if (lowerTitle.includes("booking") || lowerTitle.includes("accept")) return <CalendarCheck className="w-5 h-5 text-green-500" />;
+        if (lowerTitle.includes("cancel")) return <X className="w-5 h-5 text-red-500" />;
+        return <Bell className="w-5 h-5 text-gray-500" />;
+    };
+
+    const getIconBackground = (title: string) => {
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes("payment")) return "bg-blue-50";
+        if (lowerTitle.includes("booking") || lowerTitle.includes("accept")) return "bg-green-50";
+        if (lowerTitle.includes("cancel")) return "bg-red-50";
+        return "bg-gray-50";
+    };
+
+    if (isLoading) {
+        return (
+            <div className="max-w-2xl mx-auto py-20 px-6 space-y-4">
+                <div className="h-10 w-48 bg-gray-100 rounded-xl animate-pulse mb-8" />
+                {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-24 bg-gray-50 rounded-3xl animate-pulse" />
+                ))}
+            </div>
+        );
+    }
+
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50/30">
-            {/* Centered Sticky Header */}
-            <header className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 h-20 flex items-center justify-between">
-                <button
-                    onClick={() => router.back()}
-                    className="p-3 hover:bg-gray-50 rounded-2xl transition-all text-gray-900"
-                >
-                    <ChevronLeft className="w-7 h-7" />
-                </button>
-                <h1 className="text-xl font-black text-gray-900 absolute left-1/2 -translate-x-1/2">
-                    Notifications
-                </h1>
-                <div className="w-12" /> {/* Spacer for symmetry */}
-            </header>
-
-            <div className="max-w-2xl mx-auto w-full p-4 md:p-6 space-y-6">
-                {/* Optional Filter Tabs (Styled modern) */}
-                <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-                    {["all", "unread", "booking", "payment"].map((t) => (
-                        <button
-                            key={t}
-                            onClick={() => setFilter(t)}
-                            className={`px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${filter === t
-                                ? "bg-[#064E3B] text-white shadow-xl shadow-green-900/20"
-                                : "bg-white text-gray-400 border border-gray-100 hover:border-[#064E3B]"
-                                }`}
-                        >
-                            {t}
-                        </button>
-                    ))}
+        <div className="max-w-2xl mx-auto py-12 px-6 min-h-screen">
+            {/* Header */}
+            <div className="flex justify-between items-end mb-10">
+                <div className="space-y-2">
+                    <h1 className="text-4xl font-black text-gray-900 tracking-tight">Notifications</h1>
+                    <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Stay updated on your account</p>
                 </div>
+            </div>
 
-                {/* List */}
-                <div className="space-y-4">
-                    {filteredNotifs.map((notif, idx) => {
-                        const isMainActive = notif.unread && idx === 0;
+            {/* Notification List */}
+            <div className="space-y-4">
+                {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                        <div
+                            key={notification._id}
+                            className={`p-6 rounded-[32px] border ${notification.read ? 'bg-white border-gray-100' : 'bg-green-50/30 border-green-100'} hover:shadow-xl hover:shadow-green-900/5 transition-all duration-300 flex gap-5 items-start group`}
+                        >
+                            {/* Icon */}
+                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${getIconBackground(notification.title)}`}>
+                                {getIcon(notification.title)}
+                            </div>
 
-                        return (
-                            <div
-                                key={notif.id}
-                                onClick={() => markRead(notif.id)}
-                                className={`flex gap-6 p-6 rounded-[40px] transition-all cursor-pointer relative shadow-sm border ${isMainActive
-                                    ? "bg-[#064E3B] border-[#064E3B] text-white shadow-2xl shadow-green-900/10"
-                                    : "bg-white border-gray-100 hover:border-gray-200"
-                                    }`}
-                            >
-                                {/* Left Section: The Pill Icon */}
-                                <div className={`w-16 h-28 rounded-full shrink-0 flex flex-col items-center pt-5 shadow-inner ${isMainActive ? "bg-[#9db4ab]" : "bg-gray-50"
-                                    }`}>
-                                    <Bell className={`w-5 h-5 ${isMainActive ? "text-[#064E3B]" : "text-gray-400"}`} />
+                            {/* Content */}
+                            <div className="flex-1 space-y-1">
+                                <div className="flex justify-between items-start gap-2">
+                                    <h3 className={`text-base font-black ${notification.read ? 'text-gray-900' : 'text-[#0A5C36]'}`}>
+                                        {notification.title}
+                                    </h3>
+                                    <span className="text-[10px] font-bold text-gray-400 whitespace-nowrap uppercase tracking-widest">
+                                        {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+                                    </span>
                                 </div>
-
-                                {/* Content Section */}
-                                <div className="flex-1 py-1 space-y-2">
-                                    <div className="space-y-1">
-                                        <h3 className={`font-black text-xl tracking-tight leading-tight ${isMainActive ? "text-white" : "text-gray-900"
-                                            }`}>
-                                            {notif.title}
-                                        </h3>
-                                        <p className={`text-[15px] leading-relaxed font-medium ${isMainActive ? "text-white/80" : "text-gray-500"
-                                            }`}>
-                                            {notif.description}
-                                        </p>
-                                    </div>
-                                    <p className={`text-[13px] font-bold ${isMainActive ? "text-white/60" : "text-gray-400"
-                                        }`}>
-                                        {notif.time}
-                                    </p>
-                                </div>
-
-                                {/* Red Dot indicator for other unread messages */}
-                                {notif.unread && !isMainActive && (
-                                    <div className="absolute top-8 right-10 w-3 h-3 bg-[#064E3B] rounded-full shadow-[0_0_10px_rgba(6,78,59,0.5)]" />
+                                <p className="text-sm font-medium text-gray-600 leading-relaxed">
+                                    {notification.message}
+                                </p>
+                                
+                                {notification.referenceId && notification.title.toLowerCase().includes("booking") && (
+                                    <Link href={`/bookings/${notification.referenceId}`} className="inline-block mt-3 text-xs font-black text-[#0A5C36] hover:text-[#084a2c] uppercase tracking-widest hover:underline transition-all">
+                                        View Details &rarr;
+                                    </Link>
                                 )}
                             </div>
-                        );
-                    })}
-                </div>
 
-                {/* Empty State */}
-                {filteredNotifs.length === 0 && (
-                    <div className="py-32 text-center space-y-4 bg-white/50 rounded-[48px] border border-dashed border-gray-200">
-                        <div className="w-16 h-16 bg-gray-100 rounded-full mx-auto flex items-center justify-center">
-                            <Bell className="w-8 h-8 text-gray-300" />
+                            {/* Unread Dot */}
+                            {!notification.read && (
+                                <div className="w-2.5 h-2.5 bg-red-500 rounded-full mt-2" />
+                            )}
                         </div>
-                        <p className="text-gray-400 font-bold">No notifications yet</p>
+                    ))
+                ) : (
+                    <div className="text-center py-32 space-y-6 bg-white border-2 border-dashed border-gray-100 rounded-[40px]">
+                        <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-300">
+                            <Bell className="w-10 h-10" />
+                        </div>
+                        <div className="space-y-1">
+                            <p className="font-black text-gray-900">All caught up!</p>
+                            <p className="text-xs font-bold text-gray-400">You have no new notifications.</p>
+                        </div>
                     </div>
                 )}
             </div>

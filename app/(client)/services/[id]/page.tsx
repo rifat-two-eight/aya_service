@@ -1,38 +1,137 @@
 "use client";
 
-import { ChevronLeft, MapPin, Star, Phone, MessageSquare, Share2, Heart, CheckCircle2, ShieldCheck, Clock, Calendar, Globe, Mail, Users, Facebook, Instagram, Twitter } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { ChevronLeft, MapPin, Star, Phone, MessageSquare, Clock, Globe, Mail, Users, Facebook, Instagram, Twitter } from "lucide-react";
+import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { serviceService } from "@/services/serviceService";
+import { chatService } from "@/services/chatService";
+import { reviewService } from "@/services/reviewService";
+import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import Swal from "sweetalert2";
 
 export default function ServiceDetailPage() {
     const router = useRouter();
+    const params = useParams();
+    const serviceId = params.id as string;
+    
+    const [service, setService] = useState<any>(null);
+    const [reviews, setReviews] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isChatLoading, setIsChatLoading] = useState(false);
+    
+    // Review State
+    const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+    const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
 
-    const service = {
-        name: "Dr. Sarah Johnson - Family Medicine",
-        category: "Doctors",
-        location: "123 Medical Plaza, New York, NY 10001",
-        rating: 4.9,
-        reviews_count: 203,
-        description: "Board-certified family physician with over 15 years of experience. Providing comprehensive healthcare for all ages.",
-        phone: "(555) 123-4567",
-        email: "info@drjohnson.com",
-        website: "www.drjohnson.com",
-        image: "",
-        experience: "15 years in business",
-        employees: "8 employees",
-        verified: true,
-        services: [
-            { id: 1, name: "Lunch Special", price: 18, description: "Pasta, salad, and drink combo", duration: "45 minutes" },
-            { id: 2, name: "Family Dinner Package", price: 85, description: "Feeds 4-6 people with appetizers and dessert", duration: "1.5 hours" },
-            { id: 3, name: "Private Event Catering", price: 500, description: "Custom menu for private events (minimum 20 guests)", duration: "Full event" }
-        ],
-        reviews: [
-            { id: 1, user: "John Smith", initial: "J", rating: 5, date: "12/1/2024", comment: "Dr. Johnson is amazing! Very thorough and caring. Highly recommend." },
-            { id: 2, user: "Mary Williams", initial: "M", rating: 5, date: "11/28/2024", comment: "Best family doctor in the area. The staff is also very friendly." }
-        ]
+    useEffect(() => {
+        const fetchService = async () => {
+            if (!serviceId) return;
+            try {
+                const [serviceRes, reviewsRes] = await Promise.all([
+                    serviceService.getServiceById(serviceId),
+                    reviewService.getReviewsByServiceId(serviceId, { limit: 10 })
+                ]);
+                
+                if (serviceRes.success) {
+                    setService(serviceRes.data);
+                }
+                if (reviewsRes.success) {
+                    setReviews(reviewsRes.data.reviews || reviewsRes.data || []);
+                }
+            } catch (error: any) {
+                console.error("Error fetching service:", error);
+                toast.error("Failed to load service details");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchService();
+    }, [serviceId]);
+
+    const handleChatWithProvider = async () => {
+        if (!service?.provider?._id) return;
+        
+        setIsChatLoading(true);
+        try {
+            const response = await chatService.createChat(service.provider._id);
+            if (response.success) {
+                toast.success("Conversation started");
+                router.push("/messages");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Failed to start conversation");
+        } finally {
+            setIsChatLoading(false);
+        }
     };
+
+    const handleSubmitReview = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newReview.comment.trim()) return toast.error("Please enter a comment");
+        
+        setIsSubmittingReview(true);
+        try {
+            const response = await reviewService.createReview({
+                service: serviceId,
+                rating: newReview.rating,
+                comment: newReview.comment
+            });
+            if (response.success) {
+                toast.success("Review submitted!");
+                setReviews([response.data, ...reviews]);
+                setNewReview({ rating: 5, comment: "" });
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Failed to submit review");
+        } finally {
+            setIsSubmittingReview(false);
+        }
+    };
+
+    const handleDeleteReview = async (reviewId: string) => {
+        const result = await Swal.fire({
+            title: "Delete Review?",
+            text: "Are you sure you want to delete this review?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#0A5C36",
+            confirmButtonText: "Yes, Delete",
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await reviewService.deleteReview(reviewId);
+                setReviews(reviews.filter(r => r._id !== reviewId));
+                toast.success("Review deleted");
+            } catch (error: any) {
+                toast.error(error.message || "Failed to delete review");
+            }
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="max-w-7xl mx-auto pb-20 space-y-8 px-4 md:px-6 animate-pulse">
+                <div className="h-32 bg-gray-100 rounded-[40px]" />
+                <div className="h-64 bg-gray-50 rounded-[40px]" />
+            </div>
+        );
+    }
+
+    if (!service) {
+        return (
+            <div className="max-w-7xl mx-auto py-20 text-center">
+                <h2 className="text-2xl font-bold text-gray-900">Service not found</h2>
+                <Button onClick={() => router.back()} className="mt-4">Go Back</Button>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto pb-20 space-y-8 px-4 md:px-6">
@@ -42,8 +141,12 @@ export default function ServiceDetailPage() {
                     <ChevronLeft className="w-8 h-8 text-gray-900" />
                 </button>
                 <div className="flex items-center gap-6">
-                    <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl border-4 border-white">
-                        <Image src={service.image} alt={service.name} fill className="object-cover" />
+                    <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-gray-50">
+                        {service.photos?.[0] ? (
+                            <Image src={service.photos[0]} alt={service.name} fill className="object-cover" unoptimized={true} />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-300">No Image</div>
+                        )}
                     </div>
                     <div className="space-y-2">
                         <div className="flex items-center gap-3">
@@ -51,14 +154,17 @@ export default function ServiceDetailPage() {
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="bg-green-100 text-[#064E3B] text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg">
-                                {service.category}
+                                {service.category?.name || "Service"}
                             </span>
                         </div>
-                        <div className="flex items-center gap-1">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star key={star} className={`w-4 h-4 ${star <= 4 ? "text-yellow-400 fill-yellow-400" : "text-gray-200 fill-gray-200"}`} />
-                            ))}
-                            <span className="text-sm font-bold text-gray-400 ml-2">{service.rating} ({service.reviews_count} reviews)</span>
+                        <div className="flex items-center gap-1.5">
+                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                            <span className="text-sm font-bold text-gray-900">
+                                {service.rating?.averageRating || 0}
+                            </span>
+                            <span className="text-sm font-bold text-gray-400 ml-1">
+                                ({service.rating?.total || 0} reviews)
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -70,10 +176,10 @@ export default function ServiceDetailPage() {
 
             <div className="flex flex-wrap gap-6 text-sm font-bold text-gray-400">
                 <div className="flex items-center gap-2">
-                    <span className="text-xl">🏪</span> {service.experience}
+                    <span className="text-xl">🏪</span> {service.provider?.business?.businessName || "Verified Provider"}
                 </div>
                 <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4" /> {service.employees}
+                    <Users className="w-4 h-4" /> {service.maxBookingsPerDay || 0} slots per day
                 </div>
             </div>
 
@@ -81,61 +187,120 @@ export default function ServiceDetailPage() {
                 {/* Left/Middle: Services & About */}
                 <div className="lg:col-span-2 space-y-12">
                     <section className="space-y-6">
-                        <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Services & Pricing</h2>
-                        <div className="space-y-4">
-                            {service.services.map((item) => (
-                                <div key={item.id} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-md transition-all space-y-5">
-                                    <div className="flex justify-between items-start">
-                                        <div className="space-y-1">
-                                            <h3 className="text-lg font-black text-gray-900">{item.name}</h3>
-                                            <p className="text-sm text-gray-400 font-medium">{item.description}</p>
-                                            <div className="flex items-center gap-1.5 text-xs text-gray-400 font-bold pt-1">
-                                                <Clock className="w-3.5 h-3.5" />
-                                                {item.duration}
-                                            </div>
-                                        </div>
-                                        <span className="text-xl font-black text-[#064E3B]">${item.price}</span>
+                        <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Pricing & Details</h2>
+                        <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm hover:shadow-md transition-all space-y-6">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                    <h3 className="text-2xl font-black text-gray-900">{service.name}</h3>
+                                    <div className="flex items-center gap-2 text-sm text-gray-400 font-bold">
+                                        <Clock className="w-4 h-4" />
+                                        Duration: {service.duration} minutes
                                     </div>
-                                    <Link href={`/services/1/book?service=${encodeURIComponent(item.name)}&price=${item.price}`}>
-                                        <Button className="w-full h-12 bg-[#064E3B] hover:bg-[#043327] rounded-2xl font-black uppercase tracking-widest text-xs">
-                                            Book Now
-                                        </Button>
-                                    </Link>
+                                </div>
+                                <span className="text-3xl font-black text-[#064E3B]">${service.price}</span>
+                            </div>
+                            <Link href={`/services/${service._id}/book`}>
+                                <Button className="w-full h-14 bg-[#064E3B] hover:bg-[#043327] rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-green-900/10">
+                                    Book This Service
+                                </Button>
+                            </Link>
+                        </div>
+                    </section>
+
+                    <Button 
+                        variant="outline" 
+                        onClick={handleChatWithProvider}
+                        disabled={isChatLoading}
+                        className="w-full h-14 rounded-2xl border-gray-100 bg-[#EBF4F0] text-[#064E3B] font-black uppercase tracking-widest text-xs hover:bg-[#deede6] flex items-center gap-2 disabled:opacity-50"
+                    >
+                        <MessageSquare className="w-4 h-4" />
+                        {isChatLoading ? "Starting Conversation..." : "Chat with Provider"}
+                    </Button>
+
+                    <section className="space-y-8">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Features</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {service.features?.map((feature: string, idx: number) => (
+                                <div key={idx} className="flex items-center gap-3 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                    <div className="w-2 h-2 bg-[#064E3B] rounded-full" />
+                                    <span className="text-sm font-medium text-gray-700">{feature}</span>
                                 </div>
                             ))}
                         </div>
                     </section>
 
-                    <Button variant="outline" className="w-full h-14 rounded-2xl border-gray-100 bg-[#EBF4F0] text-[#064E3B] font-black uppercase tracking-widest text-xs hover:bg-[#deede6] flex items-center gap-2">
-                        <MessageSquare className="w-4 h-4" />
-                        Chat
-                    </Button>
-
-                    <section className="space-y-8">
+                    {/* Reviews Section */}
+                    <section className="space-y-8 pt-8 border-t border-gray-100">
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Reviews ({service.reviews.length})</h2>
-                            <button className="text-[#064E3B] font-black text-xs uppercase tracking-widest hover:underline">Write Review</button>
+                            <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Reviews</h2>
+                            <span className="text-xs font-bold text-gray-400">{reviews.length} reviews</span>
                         </div>
-                        <div className="space-y-8">
-                            {service.reviews.map((rev) => (
-                                <div key={rev.id} className="space-y-4">
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 bg-[#064E3B] rounded-full flex items-center justify-center text-white font-black">
-                                                {rev.initial}
-                                            </div>
-                                            <div>
-                                                <h4 className="font-black text-gray-900">{rev.user}</h4>
-                                                <p className="text-xs text-gray-400 font-bold">{rev.date}</p>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-0.5">
-                                            {[1, 2, 3, 4, 5].map((s) => (
-                                                <Star key={s} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                                            ))}
-                                        </div>
+
+                        {/* Submit Review Form */}
+                        <form onSubmit={handleSubmitReview} className="bg-gray-50 p-6 rounded-[32px] space-y-4 border border-gray-100">
+                            <h3 className="text-sm font-black text-gray-900">Write a Review</h3>
+                            <div className="flex items-center gap-2">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                        key={star}
+                                        type="button"
+                                        onClick={() => setNewReview({ ...newReview, rating: star })}
+                                        className="focus:outline-none"
+                                    >
+                                        <Star className={`w-8 h-8 ${star <= newReview.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} transition-colors`} />
+                                    </button>
+                                ))}
+                            </div>
+                            <textarea
+                                placeholder="Share your experience..."
+                                value={newReview.comment}
+                                onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                                className="w-full h-24 p-4 rounded-2xl border-gray-200 bg-white font-medium focus:ring-2 focus:ring-[#0A5C36]/20 focus:border-[#0A5C36] transition-all resize-none"
+                            />
+                            <Button 
+                                type="submit" 
+                                disabled={isSubmittingReview}
+                                className="w-full h-12 bg-[#0A5C36] hover:bg-[#084a2c] rounded-xl font-black uppercase tracking-widest shadow-lg shadow-green-900/10"
+                            >
+                                {isSubmittingReview ? "Submitting..." : "Submit Review"}
+                            </Button>
+                        </form>
+
+                        {/* Review List */}
+                        <div className="space-y-4">
+                            {reviews.map((review) => (
+                                <div key={review._id} className="p-6 bg-white border border-gray-100 rounded-[32px] shadow-sm flex gap-4 group">
+                                    <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center border border-gray-100 flex-shrink-0 overflow-hidden">
+                                        {review.client?.image ? (
+                                            <img src={review.client.image} alt="" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <Users className="w-5 h-5 text-gray-400" />
+                                        )}
                                     </div>
-                                    <p className="text-gray-500 font-medium leading-relaxed">{rev.comment}</p>
+                                    <div className="flex-1 space-y-2">
+                                        <div className="flex justify-between items-start">
+                                            <div>
+                                                <h4 className="font-black text-gray-900">{review.client?.fullName || "Anonymous"}</h4>
+                                                <div className="flex items-center gap-1 mt-1">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <Star key={i} className={`w-3 h-3 ${i < review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-200"}`} />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            <button 
+                                                onClick={() => handleDeleteReview(review._id)}
+                                                className="opacity-0 group-hover:opacity-100 p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                            </button>
+                                        </div>
+                                        <p className="text-sm font-medium text-gray-600 leading-relaxed">{review.comment}</p>
+                                        <p className="text-[10px] font-black text-gray-300 uppercase tracking-widest pt-2">
+                                            {new Date(review.createdAt).toLocaleDateString()}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -147,15 +312,15 @@ export default function ServiceDetailPage() {
                     <section className="space-y-6">
                         <h2 className="text-xl font-black text-gray-900 uppercase tracking-wider">Contact Information</h2>
                         <div className="space-y-6">
-                            <ContactLink icon={<MapPin className="w-5 h-5" />} text={service.location} />
-                            <ContactLink icon={<Phone className="w-5 h-5" />} text={service.phone} />
-                            <ContactLink icon={<Mail className="w-5 h-5" />} text={service.email} />
-                            <ContactLink icon={<Globe className="w-5 h-5" />} text={service.website} />
+                            <ContactLink icon={<MapPin className="w-5 h-5" />} text={service.provider?.business?.address || "Location not provided"} />
+                            <ContactLink icon={<Phone className="w-5 h-5" />} text={service.provider?.phone || "Phone not provided"} />
+                            <ContactLink icon={<Mail className="w-5 h-5" />} text={service.provider?.email || "Email not provided"} />
+                            <ContactLink icon={<Globe className="w-5 h-5" />} text={service.provider?.business?.businessStatus === 'approved' ? "Verified Business" : "Business Profile"} />
                         </div>
                     </section>
 
                     <section className="space-y-4">
-                        <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Follow us on social media</p>
+                        <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Follow on social media</p>
                         <div className="flex gap-3">
                             <button className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-600/20 hover:scale-110 transition-transform">
                                 <Facebook className="w-5 h-5" />
@@ -180,7 +345,7 @@ function ContactLink({ icon, text }: { icon: React.ReactNode, text: string }) {
             <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-[#064E3B] group-hover:text-white transition-all">
                 {icon}
             </div>
-            <p className="text-sm font-bold text-gray-600 pt-2 group-hover:text-[#064E3B] transition-colors">{text}</p>
+            <p className="text-sm font-bold text-gray-600 pt-2 group-hover:text-[#064E3B] transition-colors line-clamp-2">{text}</p>
         </div>
     );
 }

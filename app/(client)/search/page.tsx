@@ -84,7 +84,7 @@ export default function SearchPage() {
                     <div key={service.name} className="flex flex-col gap-6 p-8 rounded-[40px] border border-gray-100 bg-white shadow-xl shadow-black/5 hover:shadow-2xl transition-all duration-500 group">
                         <div className="flex gap-6">
                             <div className="relative w-28 h-28 rounded-[32px] overflow-hidden shadow-inner">
-                                <Image src={service.image} alt={service.name} fill className="object-cover" />
+                                <Image src={service.image} alt={service.name} fill className="object-cover" unoptimized={true} />
                             </div>
                             <div className="flex-1 space-y-3">
                                 <div className="flex justify-between items-start">

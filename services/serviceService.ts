@@ -32,6 +32,26 @@ export const serviceService = {
     }
   },
 
+  getTopRatedServices: async () => {
+    try {
+      const response = await axiosInstance.get("/service/top-rated");
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getServiceAvailability: async (id: string, date: string) => {
+    try {
+      const response = await axiosInstance.get(`/service/${id}/availability`, {
+        params: { date },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   deleteService: async (id: string) => {
     try {
       const response = await axiosInstance.delete(`/service/${id}`);

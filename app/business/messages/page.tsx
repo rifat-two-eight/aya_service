@@ -46,7 +46,7 @@ export default function BusinessMessagesPage() {
                                     <div className="relative">
                                         {chat.image ? (
                                             <div className="w-16 h-16 rounded-[24px] overflow-hidden shadow-md relative">
-                                                <Image src={chat.image} alt={chat.name} fill className="object-cover" />
+                                                <Image src={chat.image} alt={chat.name} fill className="object-cover" unoptimized={true} />
                                             </div>
                                         ) : (
                                             <div className="w-16 h-16 rounded-[24px] bg-gray-100 flex items-center justify-center text-gray-400 text-lg shadow-inner font-bold">

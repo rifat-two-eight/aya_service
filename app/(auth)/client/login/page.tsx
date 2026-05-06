@@ -1,25 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Send } from "lucide-react";
+import { ChevronLeft, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { toast } from "sonner";
+import { authService } from "@/services/authService";
+
 export default function ClientLoginPage() {
     const router = useRouter();
-    const [phoneNumber, setPhoneNumber] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setTimeout(() => {
+        try {
+            const response = await authService.login(formData, 'client');
+            if (response.success) {
+                toast.success(response.message || "Login successful!");
+                router.push("/home");
+            } else {
+                toast.error(response.message || "Login failed");
+            }
+        } catch (error: any) {
+            toast.error(error.message || "Something went wrong. Please try again.");
+        } finally {
             setIsLoading(false);
-            router.push("/client/otp");
-        }, 1500);
+        }
     };
 
     return (
@@ -36,51 +52,65 @@ export default function ClientLoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-gray-900">Login</h1>
-                    <p className="text-gray-500 font-medium text-lg">Get started</p>
-                    <p className="text-gray-400">Enter your phone number to Booking</p>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Client Login</h1>
+                    <p className="text-gray-500 font-medium text-lg">Welcome back to AYA Shop</p>
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="space-y-3">
-                        <Label htmlFor="phone" className="text-sm font-bold text-gray-900 uppercase tracking-wider">
-                            Phone Number
-                        </Label>
-                        <div className="relative flex items-center">
-                            <div className="absolute left-4 flex items-center gap-2 border-r pr-3 border-gray-200">
-                                <div className="w-7 h-5 relative overflow-hidden rounded-sm shadow-sm">
-                                    {/* BD Flag placeholder style */}
-                                    <div className="absolute inset-0 bg-[#006a4e]" />
-                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#f42a41] rounded-full" />
-                                </div>
-                                <span className="text-gray-600 font-medium">+880</span>
-                            </div>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email Address</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            required
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className="h-14 rounded-xl border-gray-100 bg-gray-50 focus:bg-white transition-all"
+                            disabled={isLoading}
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="password" className="text-sm font-semibold text-gray-700">Password</Label>
+                            <Link href="/client/forgot" className="text-[12px] font-bold text-[#0A5C36] hover:underline">
+                                Forgot Password?
+                            </Link>
+                        </div>
+                        <div className="relative">
                             <Input
-                                id="phone"
-                                type="tel"
-                                placeholder="01630******"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                id="password"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter your password"
                                 required
-                                className="h-16 pl-[110px] rounded-2xl border-gray-200 focus:border-[#0A5C36] focus:ring-[#0A5C36] text-lg font-medium shadow-sm transition-all"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                className="h-14 rounded-xl border-gray-100 bg-gray-50 focus:bg-white transition-all pr-12"
                                 disabled={isLoading}
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                            >
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
                         </div>
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-6 pt-4">
                         <Button
                             type="submit"
-                            className="w-full h-16 rounded-2xl bg-[#0A5C36] hover:bg-[#0d7344] text-white text-xl font-bold flex items-center justify-center gap-3 transition-all active:scale-[0.97] shadow-xl shadow-green-900/10 disabled:bg-gray-400"
-                            disabled={isLoading || !phoneNumber}
+                            className="w-full h-16 rounded-2xl bg-[#0A5C36] hover:bg-[#0d7344] text-white text-xl font-bold transition-all active:scale-[0.97] shadow-xl shadow-green-900/10"
+                            disabled={isLoading}
                         >
-                            {isLoading ? "Sending..." : "Send"}
-                            <Send className="w-5 h-5" />
+                            {isLoading ? "Signing in..." : "Sign In"}
                         </Button>
 
                         <p className="text-center text-gray-500 font-medium">
-                            Don&apos;t have code? <button type="button" className="text-[#0A5C36] font-bold hover:underline">Resend Again</button>
+                            Don&apos;t have an account? <Link href="/client/signup" className="text-[#0A5C36] font-bold hover:underline">Sign Up</Link>
                         </p>
                     </div>
                 </form>

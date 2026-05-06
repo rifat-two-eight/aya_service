@@ -95,6 +95,7 @@ export default function ForgotPasswordPage() {
           fill
           className="object-cover"
           priority
+          unoptimized={true}
         />
       </div>
     </div>

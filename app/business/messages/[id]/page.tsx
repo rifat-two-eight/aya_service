@@ -58,7 +58,7 @@ export default function BusinessChatPage() {
                     <div className="flex items-center gap-3">
                         {chat.image ? (
                             <div className="w-12 h-12 rounded-[18px] overflow-hidden relative shadow-md">
-                                <Image src={chat.image} alt={chat.name} fill className="object-cover" />
+                                <Image src={chat.image} alt={chat.name} fill className="object-cover" unoptimized={true} />
                             </div>
                         ) : (
                             <div className="w-12 h-12 rounded-[18px] bg-gray-100 flex items-center justify-center text-gray-400 text-base shadow-inner font-bold">
