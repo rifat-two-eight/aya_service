@@ -27,4 +27,13 @@ export const reviewService = {
       throw error.response?.data || error.message;
     }
   },
+
+  getBusinessMyReviews: async (params: { page?: number; limit?: number } = {}) => {
+    try {
+      const response = await axiosInstance.get("/review/business/my-reviews", { params });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
 };

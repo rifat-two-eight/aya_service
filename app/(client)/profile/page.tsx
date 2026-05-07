@@ -92,7 +92,7 @@ export default function ProfilePage() {
 
     const handleLogout = () => {
         authService.logout();
-        router.push("/auth/client/login");
+        router.push("/auth");
         toast.success("Logged out successfully");
     };
 
@@ -102,11 +102,11 @@ export default function ProfilePage() {
 
     return (
         <div className="max-w-xl mx-auto py-12 px-6 min-h-screen">
-            <input 
-                type="file" 
-                ref={fileInputRef} 
-                onChange={handleImageChange} 
-                className="hidden" 
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                className="hidden"
                 accept="image/*"
             />
             {/* Header */}
@@ -126,7 +126,7 @@ export default function ProfilePage() {
                 {/* Profile Card */}
                 <div className="bg-white border border-gray-100 rounded-[50px] p-8 md:p-10 shadow-2xl shadow-green-900/5 text-center relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-32 bg-[#0A5C36]/5 -z-10" />
-                    
+
                     <div className="relative inline-block mb-6 group">
                         <div className={`w-32 h-32 rounded-[40px] bg-gray-100 border-4 border-white overflow-hidden shadow-xl flex items-center justify-center transition-opacity ${isUploading ? 'opacity-50' : ''}`}>
                             {formData.image ? (
@@ -140,7 +140,7 @@ export default function ProfilePage() {
                                 </div>
                             )}
                         </div>
-                        <button 
+                        <button
                             onClick={() => fileInputRef.current?.click()}
                             disabled={isUploading}
                             className="absolute bottom-1 right-1 p-2.5 bg-[#0A5C36] text-white rounded-xl shadow-lg hover:scale-110 transition-all disabled:opacity-50 disabled:scale-100"
@@ -162,8 +162,8 @@ export default function ProfilePage() {
                 <div className="bg-white border border-gray-100 rounded-[50px] p-8 md:p-10 shadow-sm space-y-8">
                     <div className="flex justify-between items-center">
                         <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">Personal Information</h3>
-                        <button 
-                            onClick={() => setIsEditing(!isEditing)} 
+                        <button
+                            onClick={() => setIsEditing(!isEditing)}
                             className="text-xs font-black text-[#0A5C36] uppercase tracking-widest hover:underline"
                         >
                             {isEditing ? "Cancel" : "Edit Details"}
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                     </div>
 
                     {isEditing && (
-                        <Button 
+                        <Button
                             onClick={handleUpdate}
                             disabled={isUpdating}
                             className="w-full h-14 bg-[#0A5C36] hover:bg-[#084a2c] rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-green-900/10 gap-2"

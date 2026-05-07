@@ -1,5 +1,7 @@
 import axiosInstance from "@/lib/axios";
 
+export type BookingStatus = "confirmed" | "cancelled";
+
 export interface CreateBookingData {
   service: string;
   date: string;
@@ -37,7 +39,7 @@ export const bookingService = {
     }
   },
 
-  updateBookingStatus: async (id: string, status: "completed" | "cancelled") => {
+  updateBookingStatus: async (id: string, status: BookingStatus) => {
     try {
       const response = await axiosInstance.patch(`/booking/${id}/status`, { status });
       return response.data;
@@ -46,3 +48,4 @@ export const bookingService = {
     }
   },
 };
+

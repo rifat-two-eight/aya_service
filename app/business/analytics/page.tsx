@@ -1,19 +1,16 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
     Home,
     Bell,
     UserCircle,
-    LayoutGrid,
-    PlusSquare,
-    BarChart3,
-    MessageSquare,
     TrendingUp,
-    ChevronRight
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { notificationService } from "@/services/notificationService";
 
 const weeklyStats = [
     { day: "Mon", views: 45, bookings: 3, viewsPercent: 45, bookingsPercent: 30 },
@@ -33,12 +30,27 @@ const packages = [
 
 export default function BusinessAnalyticsPage() {
     const router = useRouter();
+    const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            try {
+                const response = await notificationService.getUnreadCount();
+                if (response.success) {
+                    setUnreadNotifCount(response.data?.unreadCount || 0);
+                }
+            } catch (error) {
+                console.error("Error fetching unread count:", error);
+            }
+        };
+        fetchUnreadCount();
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50 pb-24 client-ui">
-            {/* Shared Header */}
+            {/* Header */}
             <div className="bg-[#0A4D2E] text-white px-6 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-3 lg:hidden">
+                <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                         <Home className="w-6 h-6" />
                     </div>
@@ -50,7 +62,9 @@ export default function BusinessAnalyticsPage() {
                 <div className="flex items-center gap-5">
                     <Link href="/business/notifications" className="relative">
                         <Bell className="w-6 h-6" />
-                        <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-[#0A4D2E] rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+                        {unreadNotifCount > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0A4D2E]" />
+                        )}
                     </Link>
                     <Link href="/business/profile" className="flex flex-col items-center gap-0.5">
                         <UserCircle className="w-6 h-6" />
@@ -133,3 +147,5 @@ export default function BusinessAnalyticsPage() {
         </div>
     );
 }
+
+

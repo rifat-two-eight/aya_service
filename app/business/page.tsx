@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Home,
@@ -19,8 +21,12 @@ import {
   CreditCard,
   FileText,
   Clock,
-  LayoutGrid
+  LayoutGrid,
+  User,
+  Loader2,
 } from "lucide-react";
+import { reviewService } from "@/services/reviewService";
+import { notificationService } from "@/services/notificationService";
 
 const metrics = [
   { icon: Eye, label: "Total Views", value: "1,247" },
@@ -34,31 +40,46 @@ const listings = [
   { name: "Quick Lunch Catering", category: "Catering", rating: 4.7 },
 ];
 
-const reviews = [
-  {
-    author: "Sarah Johnson",
-    text: "Amazing food and excellent service!",
-    target: "Tony's Italian Restaurant",
-    date: "2024-01-02",
-    rating: 5
-  },
-  {
-    author: "Mike Chen",
-    text: "Great catering for our office event.",
-    target: "Quick Lunch Catering",
-    date: "2024-01-01",
-    rating: 4
-  },
-];
-
 export default function BusinessOverviewPage() {
   const router = useRouter();
+  const [recentReviews, setRecentReviews] = useState<any[]>([]);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(true);
+  const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+
+  useEffect(() => {
+    const fetchRecentReviews = async () => {
+      try {
+        const response = await reviewService.getBusinessMyReviews({ page: 1, limit: 2 });
+        if (response.success) {
+          setRecentReviews(response.data.reviews || []);
+        }
+      } catch (error) {
+        console.error("Error fetching recent reviews:", error);
+      } finally {
+        setIsReviewsLoading(false);
+      }
+    };
+
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await notificationService.getUnreadCount();
+        if (response.success) {
+          setUnreadNotifCount(response.data?.unreadCount || 0);
+        }
+      } catch (error) {
+        console.error("Error fetching unread count:", error);
+      }
+    };
+
+    fetchRecentReviews();
+    fetchUnreadCount();
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50/50 pb-24 client-ui">
       {/* Header */}
       <div className="bg-[#0A4D2E] text-white px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
             <Home className="w-6 h-6" />
           </div>
@@ -70,7 +91,9 @@ export default function BusinessOverviewPage() {
         <div className="flex items-center gap-5">
           <Link href="/business/notifications" className="relative">
             <Bell className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-[#0A4D2E] rounded-full text-[8px] flex items-center justify-center font-bold">1</span>
+            {unreadNotifCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0A4D2E]" />
+            )}
           </Link>
           <Link href="/business/profile" className="flex flex-col items-center gap-0.5">
             <UserCircle className="w-6 h-6" />
@@ -79,7 +102,6 @@ export default function BusinessOverviewPage() {
         </div>
       </div>
 
-      {/* Top spacing for desktop to match client side if needed, or just let layout padding handle it */}
       <div className="px-5 py-6 md:py-10 space-y-8 md:space-y-12">
         {/* Metrics Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -167,33 +189,57 @@ export default function BusinessOverviewPage() {
               View All
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {reviews.map((r, i) => (
-              <div key={r.author + r.date} className="p-6 rounded-[32px] bg-gray-50/50 hover:bg-white border border-transparent hover:border-gray-100 transition-all">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <p className="font-black text-gray-900">{r.author}</p>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">{r.date}</p>
+
+          {isReviewsLoading ? (
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="w-7 h-7 animate-spin text-[#0A5C36]" />
+            </div>
+          ) : recentReviews.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {recentReviews.map((r, i) => (
+                <div key={r._id || i} className="p-6 rounded-[32px] bg-gray-50/50 hover:bg-white border border-transparent hover:border-gray-100 transition-all flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-2xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                        {r.client?.image ? (
+                          <Image src={r.client.image} alt={r.client.fullName} width={40} height={40} className="object-cover w-full h-full" unoptimized />
+                        ) : (
+                          <User className="w-5 h-5 text-gray-400" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-black text-gray-900 text-sm">{r.client?.fullName || "Anonymous"}</p>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+                          {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 bg-white px-2 py-1 rounded-lg shadow-sm">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star key={j} className={`w-3 h-3 ${j < (r.rating || 0) ? "text-[#0A4D2E] fill-[#0A4D2E]" : "text-gray-200"}`} />
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-white px-2 py-1 rounded-lg">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`w-3 h-3 ${i < r.rating ? "text-[#0A4D2E] fill-[#0A4D2E]" : "text-gray-200"}`} />
-                    ))}
+                  <p className="text-sm font-medium text-gray-600 leading-relaxed">
+                    &quot;{r.comment || "No comment."}&quot;
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black text-[#0A4D2E] bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                      {r.service?.name || "Unknown Service"}
+                    </span>
                   </div>
                 </div>
-                <p className="text-sm font-medium text-gray-600 leading-relaxed mb-4">{r.text}</p>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black text-[#0A4D2E] bg-white px-3 py-1.5 rounded-lg border border-gray-100">
-                    {r.target}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-400 font-bold py-10">No reviews yet.</p>
+          )}
         </div>
       </div>
 
     </div>
   );
 }
+
+
 

@@ -1,41 +1,20 @@
 {
     "statusCode": 200,
     "success": true,
-    "message": "Notifications retrieved successfully",
+    "message": "Create Chat Successfully",
     "data": {
-        "notifications": [
-            {
-                "_id": "699bbfbafb523476d221efe4",
-                "title": "Payment Successful",
-                "message": "Your payment for laksns was successful. The booking is now pending provider confirmation.",
-                "receiver": "698847401039ad8f98341fce",
-                "referenceId": "699bbf6efb523476d221efd4",
-                "read": false,
-                "type": "client",
-                "createdAt": "2026-02-23T02:47:22.874Z",
-                "updatedAt": "2026-02-23T02:47:22.874Z",
-                "__v": 0
-            },
-            {
-                "_id": "699cc4208ce2460a4c6ad838",
-                "title": "Booking Accepted",
-                "message": "Your booking for laksns has been accepted by Updated Name.",
-                "receiver": "698847401039ad8f98341fce",
-                "referenceId": "699bbf6efb523476d221efd4",
-                "read": false,
-                "type": "client",
-                "createdAt": "2026-02-23T21:18:24.686Z",
-                "updatedAt": "2026-02-23T21:18:24.686Z",
-                "__v": 0
-            }
+        "_id": "69886f1f35894b9a8c0785ea",
+        "participants": [
+            "69884aa6a6bdc58688c25bcb",
+            "69884b96a6bdc58688c25bdc"
         ],
-        "pagination": {
-            "total": 2,
-            "limit": 10,
-            "page": 1,
-            "totalPage": 1
-        },
-        "unreadCount": 2
+        "isAdminSupport": false,
+        "status": true,
+        "createdAt": "2026-02-08T11:10:23.555Z",
+        "updatedAt": "2026-02-22T01:04:18.524Z",
+        "__v": 0,
+        "lastMessage": "699a5612e56794644a3df1ea",
+        "lastMessageAt": "2026-02-22T01:04:18.524Z"
     }
 }
 
@@ -46,5 +25,111 @@
 {
     "statusCode": 200,
     "success": true,
-    "message": "Unread notification count retrieved successfully"
+    "message": "Admin Support Chat Created Successfully",
+    "data": {
+        "participants": [
+            "69884b96a6bdc58688c25bdc"
+        ],
+        "isAdminSupport": true,
+        "status": true,
+        "_id": "69fcf8b7883736e96fd918fd",
+        "createdAt": "2026-05-07T20:40:23.693Z",
+        "updatedAt": "2026-05-07T20:40:23.693Z",
+        "__v": 0
+    }
+}
+
+
+
+{
+    "statusCode": 200,
+    "success": true,
+    "message": "Chat Retrieve Successfully",
+    "meta": {
+        "total": 4,
+        "limit": 10,
+        "page": 1,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "_id": "69fcf8b7883736e96fd918fd",
+            "participants": [],
+            "isAdminSupport": true,
+            "status": true,
+            "unreadCount": 0
+        },
+        {
+            "_id": "69fb83d1883736e96fd90def",
+            "participants": [
+                {
+                    "_id": "698847401039ad8f98341fce",
+                    "email": "saleva6552@azeriom.com",
+                    "image": "",
+                    "fullName": "John Doe",
+                    "role": "client"
+                }
+            ],
+            "isAdminSupport": false,
+            "status": true,
+            "lastMessage": {
+                "_id": "69fb97a8883736e96fd90fcf",
+                "sender": "698847401039ad8f98341fce",
+                "text": "gdf",
+                "files": [],
+                "type": "text",
+                "createdAt": "2026-05-06T19:34:00.670Z"
+            },
+            "lastMessageAt": "2026-05-06T19:34:00.674Z",
+            "unreadCount": 2
+        },
+        {
+            "_id": "699a417de56794644a3debc8",
+            "participants": [
+                {
+                    "_id": "69972af2e56794644a3de0be",
+                    "email": "kofofe1970@esyline.com",
+                    "image": "/image/1772054214085-yn8xts.jpg",
+                    "fullName": "Sakil Hossen",
+                    "role": "client"
+                }
+            ],
+            "isAdminSupport": false,
+            "status": true,
+            "lastMessage": {
+                "_id": "69a1f45694f80176db79b4ba",
+                "sender": "69884b96a6bdc58688c25bdc",
+                "text": "hi",
+                "files": [],
+                "type": "text",
+                "createdAt": "2026-02-27T19:45:26.535Z"
+            },
+            "lastMessageAt": "2026-02-27T19:45:26.541Z",
+            "unreadCount": 0
+        },
+        {
+            "_id": "69886f1f35894b9a8c0785ea",
+            "participants": [
+                {
+                    "_id": "69884aa6a6bdc58688c25bcb",
+                    "email": "miwam42590@aixind.com",
+                    "image": "",
+                    "fullName": "Rafiul",
+                    "role": "client"
+                }
+            ],
+            "isAdminSupport": false,
+            "status": true,
+            "lastMessage": {
+                "_id": "699a5612e56794644a3df1ea",
+                "sender": "69884b96a6bdc58688c25bdc",
+                "text": "kw ",
+                "files": [],
+                "type": "text",
+                "createdAt": "2026-02-22T01:04:18.520Z"
+            },
+            "lastMessageAt": "2026-02-22T01:04:18.524Z",
+            "unreadCount": 0
+        }
+    ]
 }
