@@ -23,6 +23,8 @@ export default function ChatDetailPage() {
     const [isSending, setIsSending] = useState(false);
     const [newMessage, setNewMessage] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "";
     
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -122,7 +124,7 @@ export default function ChatDetailPage() {
         return <div className="max-w-2xl mx-auto h-screen flex items-center justify-center animate-pulse font-black text-[#0A5C36] uppercase tracking-widest">Loading Conversation...</div>;
     }
 
-    const participant = chat?.participants?.[0];
+    const opponent = chat?.participants?.find((p: any) => p._id !== currentUser?._id) || chat?.participants?.[0];
     const isSupport = chat?.isAdminSupport;
 
     return (
@@ -139,8 +141,8 @@ export default function ChatDetailPage() {
                                 <div className="w-full h-full bg-[#0A5C36] flex items-center justify-center text-white">
                                     <ShieldCheck className="w-6 h-6" />
                                 </div>
-                            ) : participant?.image ? (
-                                <Image src={participant.image} alt="" fill className="object-cover" unoptimized={true} />
+                            ) : opponent?.image ? (
+                                <Image src={opponent.image.startsWith('http') ? opponent.image : `${baseUrl}${opponent.image}`} alt="" fill className="object-cover" unoptimized={true} />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center text-gray-300">
                                     <User className="w-6 h-6" />
@@ -149,7 +151,7 @@ export default function ChatDetailPage() {
                         </div>
                         <div>
                             <h2 className="text-sm font-black text-gray-900 leading-tight">
-                                {isSupport ? "AYA Support" : participant?.fullName}
+                                {isSupport ? "AYA Support" : opponent?.fullName || "Chat Partner"}
                             </h2>
                             <p className="text-[10px] font-bold text-green-500 uppercase tracking-widest flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
@@ -183,7 +185,7 @@ export default function ChatDetailPage() {
                                             <div className="space-y-2">
                                                 {msg.files[0].match(/\.(jpg|jpeg|png|gif)$/i) ? (
                                                     <div className="relative w-48 h-32 rounded-lg overflow-hidden">
-                                                        <Image src={msg.files[0]} alt="" fill className="object-cover" unoptimized={true} />
+                                                        <Image src={msg.files[0].startsWith('http') ? msg.files[0] : `${baseUrl}${msg.files[0]}`} alt="" fill className="object-cover" unoptimized={true} />
                                                     </div>
                                                 ) : (
                                                     <div className="flex items-center gap-2 text-sm font-bold">
