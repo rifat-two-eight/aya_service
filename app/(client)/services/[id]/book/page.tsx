@@ -38,7 +38,7 @@ export default function BookingPage() {
         const fetchService = async () => {
             if (!serviceId) return;
             try {
-                const response = await serviceService.getServiceById(serviceId);
+                const response = await serviceService.getSingleService(serviceId);
                 if (response.success) {
                     setService(response.data);
                 }
@@ -60,7 +60,9 @@ export default function BookingPage() {
                 const dateStr = format(selectedDate, "yyyy-MM-dd");
                 const response = await serviceService.getServiceAvailability(serviceId, dateStr);
                 if (response.success) {
-                    setAvailableSlots(response.data || []);
+                    const aData = response.data;
+                    const aList = Array.isArray(aData) ? aData : aData?.slots || aData?.data || [];
+                    setAvailableSlots(aList);
                     setSelectedSlot(null); // Reset selection when date changes
                 }
             } catch (error: any) {

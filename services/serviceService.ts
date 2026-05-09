@@ -58,4 +58,26 @@ export const serviceService = {
       throw error.response?.data || error.message;
     }
   },
+
+  getTopRatedServices: async () => {
+    try {
+      const response = await axiosInstance.get("/service", {
+        params: { limit: 10, page: 1, sort: "-rating.averageRating" },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getServiceAvailability: async (id: string, date: string) => {
+    try {
+      const response = await axiosInstance.get(`/service/${id}/availability`, {
+        params: { date },
+      });
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
 };

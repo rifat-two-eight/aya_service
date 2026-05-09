@@ -20,6 +20,8 @@ export default function ClientHomePage() {
     const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
     const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "";
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -31,11 +33,15 @@ export default function ClientHomePage() {
                 ]);
 
                 if (servicesRes.status === 'fulfilled' && servicesRes.value.success) {
-                    setServices(servicesRes.value.data.slice(0, 3));
+                    const sData = servicesRes.value.data;
+                    const sList = Array.isArray(sData) ? sData : sData?.data || [];
+                    setServices(sList.slice(0, 3));
                 }
 
                 if (categoriesRes.status === 'fulfilled' && categoriesRes.value.success) {
-                    setCategories(categoriesRes.value.data.categories);
+                    const cData = categoriesRes.value.data;
+                    const cList = Array.isArray(cData) ? cData : cData?.data || cData?.categories || [];
+                    setCategories(cList);
                 }
 
                 if (notifRes.status === 'fulfilled' && notifRes.value.success) {
@@ -161,7 +167,7 @@ export default function ClientHomePage() {
                                 <div className="w-20 h-20 md:w-24 md:h-24 bg-white border border-gray-100 rounded-[32px] flex items-center justify-center overflow-hidden shadow-sm group-hover:scale-110 group-hover:border-[#0A5C36] group-hover:shadow-xl transition-all duration-500 relative">
                                     {cat.image ? (
                                         <Image
-                                            src={cat.image}
+                                            src={cat.image.startsWith('http') ? cat.image : `${baseUrl}${cat.image}`}
                                             alt={cat.name}
                                             fill
                                             className="object-cover"
@@ -222,7 +228,7 @@ export default function ClientHomePage() {
                                 <div className="relative w-full h-56 rounded-[32px] overflow-hidden shadow-inner bg-gray-50">
                                     {service.photos?.[0] ? (
                                         <Image
-                                            src={service.photos[0]}
+                                            src={service.photos[0].startsWith('http') ? service.photos[0] : `${baseUrl}${service.photos[0]}`}
                                             alt={service.name}
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-700"

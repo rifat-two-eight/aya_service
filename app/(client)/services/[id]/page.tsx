@@ -22,6 +22,8 @@ export default function ServiceDetailPage() {
     const [reviews, setReviews] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isChatLoading, setIsChatLoading] = useState(false);
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "") || "";
     
     // Review State
     const [isSubmittingReview, setIsSubmittingReview] = useState(false);
@@ -32,7 +34,7 @@ export default function ServiceDetailPage() {
             if (!serviceId) return;
             try {
                 const [serviceRes, reviewsRes] = await Promise.all([
-                    serviceService.getServiceById(serviceId),
+                    serviceService.getSingleService(serviceId),
                     reviewService.getReviewsByServiceId(serviceId, { limit: 10 })
                 ]);
                 
@@ -143,7 +145,7 @@ export default function ServiceDetailPage() {
                 <div className="flex items-center gap-6">
                     <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-gray-50">
                         {service.photos?.[0] ? (
-                            <Image src={service.photos[0]} alt={service.name} fill className="object-cover" unoptimized={true} />
+                            <Image src={service.photos[0].startsWith('http') ? service.photos[0] : `${baseUrl}${service.photos[0]}`} alt={service.name} fill className="object-cover" unoptimized={true} />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-300">No Image</div>
                         )}
@@ -274,7 +276,7 @@ export default function ServiceDetailPage() {
                                 <div key={review._id} className="p-6 bg-white border border-gray-100 rounded-[32px] shadow-sm flex gap-4 group">
                                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center border border-gray-100 flex-shrink-0 overflow-hidden">
                                         {review.client?.image ? (
-                                            <img src={review.client.image} alt="" className="w-full h-full object-cover" />
+                                            <img src={review.client.image.startsWith('http') ? review.client.image : `${baseUrl}${review.client.image}`} alt="" className="w-full h-full object-cover" />
                                         ) : (
                                             <Users className="w-5 h-5 text-gray-400" />
                                         )}
