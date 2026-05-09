@@ -195,7 +195,6 @@ export default function BookingRequestsPage() {
                                         </div>
                                     )}
 
-                                    {/* Action Buttons — only show for bookings that can be actioned */}
                                     {(b.status === "registered" || b.status === "pending") && (
                                         <div className="flex gap-4 pt-1">
                                             <Button
