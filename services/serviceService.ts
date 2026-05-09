@@ -1,29 +1,16 @@
 import axiosInstance from "@/lib/axios";
 
-export interface ServiceFetchParams {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-}
-
 export const serviceService = {
-  getServices: async (params: ServiceFetchParams = {}) => {
+  getServices: async (params?: { page?: number; limit?: number; search?: string }) => {
     try {
-      const { page = 1, limit = 10, searchTerm = "" } = params;
-      const response = await axiosInstance.get("/service", {
-        params: {
-          page,
-          limit,
-          searchTerm,
-        },
-      });
+      const response = await axiosInstance.get("/service", { params });
       return response.data;
     } catch (error: any) {
       throw error.response?.data || error.message;
     }
   },
 
-  getServiceById: async (id: string) => {
+  getSingleService: async (id: string) => {
     try {
       const response = await axiosInstance.get(`/service/${id}`);
       return response.data;
@@ -32,19 +19,21 @@ export const serviceService = {
     }
   },
 
-  getTopRatedServices: async () => {
+  createService: async (data: FormData) => {
     try {
-      const response = await axiosInstance.get("/service/top-rated");
+      const response = await axiosInstance.post("/service", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return response.data;
     } catch (error: any) {
       throw error.response?.data || error.message;
     }
   },
 
-  getServiceAvailability: async (id: string, date: string) => {
+  updateService: async (id: string, data: FormData) => {
     try {
-      const response = await axiosInstance.get(`/service/${id}/availability`, {
-        params: { date },
+      const response = await axiosInstance.patch(`/service/${id}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
     } catch (error: any) {
@@ -55,6 +44,15 @@ export const serviceService = {
   deleteService: async (id: string) => {
     try {
       const response = await axiosInstance.delete(`/service/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  toggleStatus: async (id: string) => {
+    try {
+      const response = await axiosInstance.patch(`/service/${id}/toggle-status`);
       return response.data;
     } catch (error: any) {
       throw error.response?.data || error.message;

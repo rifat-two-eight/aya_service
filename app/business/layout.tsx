@@ -14,7 +14,8 @@ import {
     HelpCircle,
     LogOut
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { authService } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 export default function BusinessLayout({
     children,
@@ -22,6 +23,12 @@ export default function BusinessLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        authService.logout();
+        router.push("/auth");
+    };
 
     const navItems = [
         { icon: LayoutGrid, label: "Overview", href: "/business" },
@@ -70,7 +77,10 @@ export default function BusinessLayout({
                         <UserCircle className="w-6 h-6" />
                         <span className="text-lg">Profile</span>
                     </Link>
-                    <button className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl text-white/60 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold">
+                    <button 
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl text-white/60 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-left"
+                    >
                         <LogOut className="w-6 h-6" />
                         <span className="text-lg">Log out</span>
                     </button>
