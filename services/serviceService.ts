@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/axios";
 
 export const serviceService = {
-  getServices: async (params?: { page?: number; limit?: number; search?: string }) => {
+  getServices: async (params?: { page?: number; limit?: number; search?: string; searchTerm?: string }) => {
     try {
       const response = await axiosInstance.get("/service", { params });
       return response.data;

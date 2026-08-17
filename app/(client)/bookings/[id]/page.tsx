@@ -56,7 +56,7 @@ export default function BookingDetailPage() {
                 confirmButton: "rounded-2xl font-black uppercase tracking-widest",
                 cancelButton: "rounded-2xl font-black uppercase tracking-widest"
             }
-        });
+        } as any);
 
         if (result.isConfirmed) {
             setIsUpdating(true);

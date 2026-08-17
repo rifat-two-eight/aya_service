@@ -47,7 +47,7 @@ export default function MessagesPage() {
             confirmButtonText: "Yes, Delete",
             background: "#fff",
             borderRadius: "32px",
-        });
+        } as any);
 
         if (result.isConfirmed) {
             try {
